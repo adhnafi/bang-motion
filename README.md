@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="icon.svg" width="120" alt="Bang Motion icon">
+
 # Bang Motion
 
 **An agent skill for building motion graphics in the browser — product openers and promos, bumpers and idents, channel intros, kinetic typography, lower thirds, and explainers.**
