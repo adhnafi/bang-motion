@@ -57,7 +57,20 @@ The agent writes a style brief (palette from your logo, a display font with char
 
 ## Install
 
-Bang Motion follows the open **Agent Skills** layout: a folder with `SKILL.md` (frontmatter + instructions), `references/`, `assets/`, `scripts/`. Any agent that reads this format can use it; any other agent can simply be pointed at `SKILL.md`.
+Bang Motion follows the open **Agent Skills** layout: a folder with `SKILL.md` (frontmatter + instructions), `references/`, `assets/`, `scripts/`. It also ships as a Claude Code **plugin**, so it can be installed and updated with two commands.
+
+### As a plugin (Claude Code)
+
+```
+/plugin marketplace add bangtutorial/bang-motion
+```
+```
+/plugin install bang-motion@bang-motion
+```
+
+The skill then shows up in your skill list and stays updatable with `/plugin marketplace update bang-motion`.
+
+### Manual (any agent)
 
 ```bash
 git clone https://github.com/bangtutorial/bang-motion
@@ -100,6 +113,7 @@ Full detail lives in `SKILL.md` and `references/`.
 
 ```
 SKILL.md                     rules & workflow (read by the agent)
+.claude-plugin/              plugin + marketplace manifests (Claude Code install)
 references/
   anti-ppt.md                real rejected patterns → fixes
   explainer.md               five styles, camera recipes, VO re-timing
