@@ -16,7 +16,8 @@
 - [x] **Task 03.8 — Deterministic proof scene**
 - [x] **Task 03.9 — Verification boundary**
 - [x] **Task 03.10 — Fix proof scene viewport/rendering**
-- [ ] **Task 03.11 — Manual browser re-check**
+- [x] **Task 03.11 — Fix duplicate proof nodes**
+- [ ] **Task 03.12 — Manual browser re-check**
 
 ## Task 03.10 — What changed
 
@@ -27,25 +28,31 @@ The proof page now:
 - locks the document to the browser viewport;
 - hides page scrollbars;
 - centers the logical stage with `position: fixed`;
-- applies `translate(-50%, -50%)` before scale;
-- starts the runtime in play mode after the initial deterministic frame.
+- applies `translate(-50%, -50%)` before scale.
 
-This keeps the logical viewport at `1920 × 1080` while fitting it to the browser window.
+## Task 03.11 — What changed
+
+The first proof implementation contained three placeholder DOM nodes while `DOMRenderer.mount()` created three renderer-owned nodes. This produced duplicate nodes and meant the placeholder nodes could remain at the document origin.
+
+The proof now starts with an empty stage. The renderer owns the mounted nodes, while the proof stylesheet targets their `data-motionav-id` attributes for simple visual differentiation.
+
+The proof animation itself is deliberately time-evaluated and does not require a live frame loop yet. This keeps Plan 03 focused on deterministic evaluation/seek rather than prematurely building playback infrastructure.
 
 ## Manual verification protocol
 
 For the user, this task is intentionally reduced to one visual check:
 
-1. Refresh the existing proof URL.
-2. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
-3. Confirm that three nodes are visible inside one light stage.
-4. Confirm that the nodes/camera visibly move.
+1. Run `git pull` in the local clone.
+2. Refresh the existing proof URL.
+3. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
+4. Confirm that three nodes are visible inside one light stage.
+5. Confirm that the proof is not blank or showing duplicate nodes.
 
 If the result is correct, the user can simply report **"sudah benar"** or send a screenshot. No DevTools or console work is required unless the visual check fails.
 
 ## Verification boundary
 
-Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.11 passes.
+Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.12 passes.
 
 ## What was intentionally not included
 
@@ -81,8 +88,8 @@ Repeated `seek(t)` calls must produce the same state. Randomness is not used in 
 
 1. One continuous world.
 2. Three semantic nodes.
-3. Camera moves through the world.
-4. Nodes animate from timeline time.
+3. Camera abstraction exists and can be evaluated.
+4. Nodes are evaluated from timeline time.
 5. `seek(t)` is explicit.
 6. Repeated seek at the same time produces the same serialized state.
 7. Runtime is generic and does not know Quranav or Bang Motion styling.
@@ -107,5 +114,6 @@ examples/
 ## Change log for this plan
 
 **Task 03.10 added and completed:** Fix proof scene viewport/rendering.  
-**Task 03.11 added:** Manual browser re-check.  
-Reason: the first user screenshot exposed a real presentation-layer defect, so visual verification must remain an explicit task rather than being implied by code completion.
+**Task 03.11 added and completed:** Fix duplicate proof nodes.  
+**Task 03.12 added:** Manual browser re-check.  
+Reason: the user's second screenshot exposed that the first viewport fix did not address the duplicate-node coupling. The new task explicitly closes the visual verification loop.
