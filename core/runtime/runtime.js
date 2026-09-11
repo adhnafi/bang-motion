@@ -4,9 +4,10 @@ export class MotionavRuntime {
     this.clock = clock;
     this.renderer = renderer;
     this.evaluate = evaluate;
-    this.renderer.mount(scene);
     this._raf = null;
     this._lastNow = null;
+    this._frame = 0;
+    this.renderer.mount(scene);
   }
 
   seek(time) {
@@ -20,7 +21,7 @@ export class MotionavRuntime {
     if (this.clock.playing) return;
     this.clock.play();
     this._lastNow = performance.now();
-    this._tick();
+    this._scheduleFrame();
   }
 
   pause() {
@@ -30,18 +31,30 @@ export class MotionavRuntime {
     this._lastNow = null;
   }
 
-  _tick() {
+  _scheduleFrame() {
+    if (!this.clock.playing || this._raf !== null) return;
+    this._raf = requestAnimationFrame((now) => {
+      this._raf = null;
+      this._tick(now);
+    });
+  }
+
+  _tick(now = performance.now()) {
     if (!this.clock.playing) return;
-    const now = performance.now();
-    const delta = this._lastNow === null ? 0 : (now - this._lastNow) / 1000;
+    const delta = this._lastNow === null ? 0 : Math.max(0, (now - this._lastNow) / 1000);
     this._lastNow = now;
     const t = this.clock.advance(delta);
     this.evaluate(this.scene, t);
     this.renderer.render(this.scene);
-    this._raf = requestAnimationFrame(() => this._tick());
+    this._frame += 1;
+    this._scheduleFrame();
   }
 
   snapshot() {
     return this.scene.snapshot();
+  }
+
+  get frame() {
+    return this._frame;
   }
 }
