@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Motionav Plan 03 Core Proof</title>
+<style>
+  html,body{margin:0;background:#111;min-height:100%;display:grid;place-items:center}
+  #stage{position:relative;overflow:hidden;background:#eee;transform-origin:center}
+  .node{position:absolute;width:120px;height:120px;border-radius:16px}
+  #a{background:#111} #b{background:#777} #c{background:#ccc}
+</style>
+</head>
+<body>
+<div id="stage"><div class="node" id="a"></div><div class="node" id="b"></div><div class="node" id="c"></div></div>
+<script type="module">
+import { Viewport } from '../../core/composition/viewport.js';
+import { Node } from '../../core/scene/node.js';
+import { Scene } from '../../core/scene/scene.js';
+import { Camera } from '../../core/camera/camera.js';
+import { TimelineClock } from '../../core/timeline/clock.js';
+import { DOMRenderer } from '../../core/renderer/dom-renderer.js';
+import { MotionavRuntime } from '../../core/runtime/runtime.js';
+
+const viewport = new Viewport();
+const camera = new Camera();
+const scene = new Scene({ viewport, camera });
+scene.add(new Node({id:'a',x:180,y:420}));
+scene.add(new Node({id:'b',x:820,y:360}));
+scene.add(new Node({id:'c',x:1450,y:430}));
+
+const renderer = new DOMRenderer(document.querySelector('#stage'));
+const clock = new TimelineClock({duration:4});
+const runtime = new MotionavRuntime({
+  scene, clock, renderer,
+  evaluate(scene,t){
+    scene.camera.x = 900 * (t / 4);
+    scene.camera.zoom = 1 + 0.12 * Math.sin(t * Math.PI / 4);
+    scene.get('a').transform.y = 420 + 50 * Math.sin(t * Math.PI / 2);
+    scene.get('b').transform.y = 360 + 70 * Math.sin(t * Math.PI / 2 + 1);
+    scene.get('c').transform.y = 430 + 45 * Math.sin(t * Math.PI / 2 + 2);
+  }
+});
+
+const fit=()=>{const s=Math.min(innerWidth/viewport.width,innerHeight/viewport.height);document.querySelector('#stage').style.transform=`scale(${s})`};
+addEventListener('resize',fit); fit();
+
+window.MOTIONAV={
+  ready:true,
+  duration:clock.duration,
+  seek:t=>runtime.seek(t),
+  snapshot:()=>runtime.snapshot(),
+  play:()=>runtime.play(),
+  pause:()=>runtime.pause()
+};
+runtime.seek(0);
+</script>
+</body>
+</html>
