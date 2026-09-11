@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Motionav Plan 03 Core Proof</title>
 <style>
-  html,body{margin:0;background:#111;min-height:100%;display:grid;place-items:center}
-  #stage{position:relative;overflow:hidden;background:#eee;transform-origin:center}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111}
+  #stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:#eee;transform-origin:center}
   .node{position:absolute;width:120px;height:120px;border-radius:16px}
   #a{background:#111} #b{background:#777} #c{background:#ccc}
 </style>
@@ -29,7 +29,8 @@ scene.add(new Node({id:'a',x:180,y:420}));
 scene.add(new Node({id:'b',x:820,y:360}));
 scene.add(new Node({id:'c',x:1450,y:430}));
 
-const renderer = new DOMRenderer(document.querySelector('#stage'));
+const stage = document.querySelector('#stage');
+const renderer = new DOMRenderer(stage);
 const clock = new TimelineClock({duration:4});
 const runtime = new MotionavRuntime({
   scene, clock, renderer,
@@ -42,7 +43,10 @@ const runtime = new MotionavRuntime({
   }
 });
 
-const fit=()=>{const s=Math.min(innerWidth/viewport.width,innerHeight/viewport.height);document.querySelector('#stage').style.transform=`scale(${s})`};
+const fit=()=>{
+  const s=Math.min(innerWidth/viewport.width,innerHeight/viewport.height);
+  stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+};
 addEventListener('resize',fit); fit();
 
 window.MOTIONAV={
@@ -54,6 +58,7 @@ window.MOTIONAV={
   pause:()=>runtime.pause()
 };
 runtime.seek(0);
+runtime.play();
 </script>
 </body>
 </html>
