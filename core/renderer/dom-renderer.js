@@ -8,14 +8,18 @@ export class DOMRenderer {
   mount(scene) {
     this.root.style.width = `${scene.viewport.width}px`;
     this.root.style.height = `${scene.viewport.height}px`;
+
     for (const node of scene.nodes.values()) {
-      const el = document.createElement('div');
-      el.dataset.motionavId = node.id;
-      el.style.position = 'absolute';
-      el.style.width = '120px';
-      el.style.height = '120px';
-      el.style.borderRadius = '16px';
-      this.root.appendChild(el);
+      let el = this.root.querySelector(`[data-motionav-id="${node.id}"]`);
+      if (!el) {
+        el = document.createElement('div');
+        el.dataset.motionavId = node.id;
+        el.style.position = 'absolute';
+        el.style.width = '120px';
+        el.style.height = '120px';
+        el.style.borderRadius = '16px';
+        this.root.appendChild(el);
+      }
       this.elements.set(node.id, el);
     }
   }
