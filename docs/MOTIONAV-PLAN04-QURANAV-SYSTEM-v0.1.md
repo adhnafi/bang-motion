@@ -2,7 +2,7 @@
 
 **Status:** IN PROGRESS  
 **Date:** 2026-09-12  
-**Purpose:** prove that a channel-specific visual system can sit above Motionav Core without leaking Quranav identity into Core.
+**Purpose:** prove that a channel-specific visual system can sit above Motionav Core without leaking channel identity into Core.
 
 ## Task list
 
@@ -20,7 +20,7 @@ Plan 04 succeeds if a Quranav-branded proof can be composed using Core primitive
 
 ## Important scope rule
 
-This is a **prototype visual system**, not the final Quranav brand system. The palette, typography, shapes, and motion choices are provisional and exist to test the architecture. Final channel identity should be refined separately from Core engineering.
+This is a **prototype visual system**, not the final Quranav brand system. The palette, typography, shapes, and motion choices are provisional and exist to test architecture. Final channel identity should be refined separately from Core engineering.
 
 ## Layer contract
 
@@ -34,36 +34,44 @@ Motionav Core
 Renderer
 ```
 
-The adapter may choose visual presentation and channel semantics. Core only provides mechanics.
+The adapter chooses visual presentation and channel semantics. Core provides mechanics only.
 
 ## Task 04.1 — Adapter boundary
 
-Created a channel adapter that owns Quranav-specific visual tokens and role mapping. It does not modify Core timeline, camera, or runtime behavior.
+**PASS — implementation complete.** Created `adapters/quranav/visual-system.js` as the channel-level home for provisional visual tokens and motion recipes.
 
 ## Task 04.2 — Generic appearance hook
 
-Core `Node` now accepts a generic `appearance` object. The DOM renderer reads generic appearance values such as width, height, radius, background, border, and shadow. This is a presentation hook, not a Quranav API.
+**PASS — implementation complete.** Core `Node` now accepts a generic `appearance` object, and the DOM renderer consumes generic presentation fields such as width, height, radius, background, border, shadow, and text color. The Core API does not name the channel.
 
 ## Task 04.3 — Visual tokens
 
-The prototype defines provisional tokens for canvas, ink, accent, muted text, and surface treatment. These are isolated under the Quranav system and are not placed in Core.
+**PASS — implementation complete.** Canvas, ink, accent, muted, and surface tokens live under the channel adapter rather than Core.
 
 ## Task 04.4 — Motion signature
 
-The prototype uses restrained entrance, vertical drift, scale emphasis, and camera movement. These are channel-level choreography choices; Core only executes time-based state changes.
+**PASS — implementation complete.** The prototype defines restrained entrance, drift, emphasis, and camera choreography at the channel layer. Core continues to execute generic time-based evaluation.
 
-## Task 04.5 — Proof scene
+## Task 04.5 — First Quranav system proof scene
 
-The proof demonstrates a channel opener-like composition with a Quranav wordmark/title treatment, a central semantic subject, supporting text, and a persistent background field. It intentionally uses abstract shapes instead of final channel assets.
+**PASS — implementation complete.** Added `examples/plan04-channel-system/index.html`. It composes a channel-branded opener-like scene using Core `Viewport`, `Scene`, `Node`, `Camera`, `TimelineClock`, `DOMRenderer`, and `MotionavRuntime`, while importing visual choices only from the channel adapter. It uses abstract shapes rather than final channel assets.
+
+## Task 04.6 — Manual browser verification
+
+**OPEN.** User-level verification is required. The test should only ask whether the scene renders correctly and visibly moves; no DevTools should be needed unless it fails.
+
+## Task 04.7 — Boundary audit
+
+**OPEN.** Before closing Plan 04, inspect the final Core surface and confirm that channel-specific tokens, assets, and semantic rules remain outside Core.
 
 ## Verification
 
-Manual browser verification is required before Plan 04 can close. The user should only need to visually inspect the proof scene for correct composition and motion; technical console work is not required unless it fails.
+Manual browser verification is required before Plan 04 can close.
 
 ## Boundary audit criteria
 
 - No `quranav` import from Core.
-- No Quranav color/font token inside Core.
+- No channel color/font token inside Core.
 - No channel-specific asset path inside Core.
-- No Quranav storytelling rule in Runtime, Timeline, Camera, or Renderer.
+- No channel storytelling rule in Runtime, Timeline, Camera, or Renderer.
 - The same Core should remain usable by another future channel adapter.
