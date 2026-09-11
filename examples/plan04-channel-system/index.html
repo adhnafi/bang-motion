@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Channel System Prototype</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:system-ui,sans-serif}
+#stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:#F4F0E7;transform-origin:center}
+#title{position:absolute;left:180px;top:220px;font-size:88px;font-weight:700;letter-spacing:-.04em;color:#17221C;white-space:nowrap}
+#subtitle{position:absolute;left:184px;top:340px;font-size:30px;font-weight:500;color:#6D756F;white-space:nowrap}
+[data-motionav-id]{position:absolute;box-sizing:border-box}
+#hud{position:fixed;left:18px;top:14px;z-index:10;padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.78);color:#fff;font:600 14px/1.3 system-ui,sans-serif}
+</style></head><body>
+<div id="hud">CHANNEL SYSTEM · STARTING</div><div id="stage"><div id="title">Quranav</div><div id="subtitle">sebuah ruang untuk memahami manusia</div></div>
+<script type="module">
+import {Viewport} from '../../core/composition/viewport.js';
+import {Node} from '../../core/scene/node.js';
+import {Scene} from '../../core/scene/scene.js';
+import {Camera} from '../../core/camera/camera.js';
+import {TimelineClock} from '../../core/timeline/clock.js';
+import {DOMRenderer} from '../../core/renderer/dom-renderer.js';
+import {MotionavRuntime} from '../../core/runtime/runtime.js';
+import {appearance,quranavMotion} from '../../adapters/quranav/visual-system.js';
+const viewport=new Viewport(), camera=new Camera(), scene=new Scene({viewport,camera});
+scene.add(new Node({id:'accent',x:1420,y:250,appearance:appearance('accent',{width:260,height:260,radius:130})}));
+scene.add(new Node({id:'ink',x:1240,y:650,appearance:appearance('ink',{width:170,height:170,radius:85})}));
+scene.add(new Node({id:'paper',x:1520,y:650,appearance:appearance('paper',{width:210,height:210,radius:105})}));
+const stage=document.querySelector('#stage'),hud=document.querySelector('#hud'),renderer=new DOMRenderer(stage),clock=new TimelineClock({duration:5});
+const runtime=new MotionavRuntime({scene,clock,renderer,evaluate(scene,t){
+const enter=quranavMotion.enter(t);scene.camera.x=80*Math.min(1,t/2);scene.camera.zoom=1+.035*Math.sin(t*Math.PI/2.5);
+scene.get('accent').transform.y=250+quranavMotion.drift(t,18);scene.get('accent').transform.scaleX=scene.get('accent').transform.scaleY=enter*quranavMotion.emphasis(t);
+scene.get('ink').transform.x=1240+80*Math.sin(t*Math.PI/2.5);scene.get('ink').transform.y=650+quranavMotion.drift(t+1,12);
+scene.get('paper').transform.y=650+quranavMotion.drift(t+2,16);scene.get('paper').transform.scaleX=scene.get('paper').transform.scaleY=.94+.06*enter;}});
+const fit=()=>{const s=Math.min(innerWidth/viewport.width,innerHeight/viewport.height);stage.style.transform=`translate(-50%,-50%) scale(${s})`;};addEventListener('resize',fit);fit();
+window.MOTIONAV={ready:true,duration:clock.duration,seek:t=>runtime.seek(t),snapshot:()=>runtime.snapshot(),play:()=>runtime.play(),pause:()=>runtime.pause()};runtime.seek(0);runtime.play();
+setInterval(()=>hud.textContent=`CHANNEL SYSTEM · ${clock.playing?'PLAYING':'PAUSED'} · t=${clock.time.toFixed(2)}s`,100);
+</script></body></html>
