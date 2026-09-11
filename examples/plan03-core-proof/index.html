@@ -7,12 +7,14 @@
 <style>
   html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111}
   #stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:#eee;transform-origin:center}
-  .node{position:absolute;width:120px;height:120px;border-radius:16px}
-  #a{background:#111} #b{background:#777} #c{background:#ccc}
+  [data-motionav-id]{position:absolute;width:120px;height:120px;border-radius:16px}
+  [data-motionav-id="a"]{background:#111}
+  [data-motionav-id="b"]{background:#777}
+  [data-motionav-id="c"]{background:#ccc}
 </style>
 </head>
 <body>
-<div id="stage"><div class="node" id="a"></div><div class="node" id="b"></div><div class="node" id="c"></div></div>
+<div id="stage"></div>
 <script type="module">
 import { Viewport } from '../../core/composition/viewport.js';
 import { Node } from '../../core/scene/node.js';
@@ -35,10 +37,13 @@ const clock = new TimelineClock({duration:4});
 const runtime = new MotionavRuntime({
   scene, clock, renderer,
   evaluate(scene,t){
-    scene.camera.x = 900 * (t / 4);
+    scene.camera.x = 0;
     scene.camera.zoom = 1 + 0.12 * Math.sin(t * Math.PI / 4);
+    scene.get('a').transform.x = 180 + 120 * t / 4;
     scene.get('a').transform.y = 420 + 50 * Math.sin(t * Math.PI / 2);
+    scene.get('b').transform.x = 820 + 180 * t / 4;
     scene.get('b').transform.y = 360 + 70 * Math.sin(t * Math.PI / 2 + 1);
+    scene.get('c').transform.x = 1450 - 160 * t / 4;
     scene.get('c').transform.y = 430 + 45 * Math.sin(t * Math.PI / 2 + 2);
   }
 });
@@ -58,7 +63,6 @@ window.MOTIONAV={
   pause:()=>runtime.pause()
 };
 runtime.seek(0);
-runtime.play();
 </script>
 </body>
 </html>
