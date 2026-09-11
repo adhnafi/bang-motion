@@ -17,11 +17,16 @@
 - [x] **Task 03.9 — Verification boundary**
 - [x] **Task 03.10 — Fix proof scene viewport/rendering**
 - [x] **Task 03.11 — Fix duplicate proof nodes**
-- [ ] **Task 03.12 — Manual browser re-check**
+- [x] **Task 03.12 — Manual browser re-check: layout**
 - [x] **Task 03.13 — Connect runtime playback to render loop**
-- [ ] **Task 03.14 — Manual playback re-check**
+- [x] **Task 03.14 — Manual playback re-check**
 - [x] **Task 03.15 — Strengthen playback proof and diagnostics**
-- [ ] **Task 03.16 — Final manual playback re-check**
+- [x] **Task 03.16 — Final manual playback re-check**
+- [ ] **Task 03.17 — Manual deterministic seek re-check**
+
+## Verification result so far
+
+The user has confirmed that the proof now visibly plays and that the diagnostic HUD time/frame values change. This verifies the browser playback path. The screenshot also confirms the stage and three nodes render correctly.
 
 ## Task 03.10 — What changed
 
@@ -43,26 +48,23 @@ The runtime now owns a minimal `requestAnimationFrame` loop. Each frame advances
 
 ## Task 03.15 — What changed
 
-The user still observed no movement after the first playback fix. A second review hardened the frame scheduler so it cannot accidentally schedule duplicate or missing frames. The runtime now explicitly clears its pending RAF handle before processing a frame, then schedules exactly one next frame while playing.
+The proof now exposes a small diagnostic HUD showing live timeline time and frame count. The HUD is diagnostic only and does not drive animation. The proof scene also uses deliberately visible node movement so playback can be judged without developer tools.
 
-The proof scene was also made deliberately more visually obvious: node travel distances and vertical motion were increased. A small diagnostic HUD displays the live timeline time and frame count. This does not drive animation; it only exposes whether the Core playback loop is advancing.
+## Task 03.16 — Manual playback re-check
 
-## Manual verification protocol
+**PASS.** The user confirmed: the timeline/frame values change and the nodes visibly move.
 
-For the user, this task is intentionally reduced to one visual check:
+This closes the playback portion of Plan 03.
 
-1. Run `git pull` in the local clone.
-2. Refresh the existing proof URL.
-3. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
-4. Confirm that three nodes are visible inside one light stage.
-5. Confirm that the HUD changes from `STARTING` to `PLAYING` and its time/frame values increase.
-6. Confirm that the three nodes visibly move over time.
+## Task 03.17 — Manual deterministic seek re-check
 
-No DevTools or console work is required unless the visual check fails.
+**OPEN.** Playback is now proven, but deterministic seeking is a separate Core contract and should not be inferred from playback.
+
+The user test will be kept simple. The proof page should expose three temporary test controls or equivalent visible seek states so the user can confirm that returning to the same timeline time produces the same visual state. No DevTools should be required.
 
 ## Verification boundary
 
-Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.16 passes.
+Plan 03 remains **IN VERIFICATION** until deterministic seek is manually confirmed. Code completion is not treated as browser verification.
 
 ## What was intentionally not included
 
@@ -126,9 +128,10 @@ examples/
 
 **Task 03.10 added and completed:** Fix proof scene viewport/rendering.  
 **Task 03.11 added and completed:** Fix duplicate proof nodes.  
-**Task 03.12 remains open:** Manual browser re-check.  
+**Task 03.12 added and completed:** Manual browser layout re-check.  
 **Task 03.13 added and completed:** Connect runtime playback to render loop.  
-**Task 03.14 added:** Manual playback re-check.  
+**Task 03.14 added and completed:** Manual playback re-check.  
 **Task 03.15 added and completed:** Strengthen playback proof and diagnostics.  
-**Task 03.16 added:** Final manual playback re-check.  
-Reason: the user still observed a static proof after the first playback implementation, so the scheduler was hardened and the proof was instrumented with visible diagnostics before another manual check.
+**Task 03.16 added and completed:** Final manual playback re-check.  
+**Task 03.17 added:** Manual deterministic seek re-check.  
+Reason: playback is now empirically confirmed, but deterministic seeking is a distinct requirement and must be verified independently before Plan 03 can close.
