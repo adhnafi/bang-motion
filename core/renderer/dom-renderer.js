@@ -15,9 +15,6 @@ export class DOMRenderer {
         el = document.createElement('div');
         el.dataset.motionavId = node.id;
         el.style.position = 'absolute';
-        el.style.width = '120px';
-        el.style.height = '120px';
-        el.style.borderRadius = '16px';
         this.root.appendChild(el);
       }
       this.elements.set(node.id, el);
@@ -30,8 +27,16 @@ export class DOMRenderer {
       const el = this.elements.get(node.id);
       if (!el) continue;
       const t = node.transform;
+      const a = node.appearance ?? {};
       const x = (t.x - camera.x) * camera.zoom;
       const y = (t.y - camera.y) * camera.zoom;
+      if (a.width != null) el.style.width = `${a.width}px`;
+      if (a.height != null) el.style.height = `${a.height}px`;
+      if (a.radius != null) el.style.borderRadius = `${a.radius}px`;
+      if (a.background != null) el.style.background = a.background;
+      if (a.border != null) el.style.border = a.border;
+      if (a.shadow != null) el.style.boxShadow = a.shadow;
+      if (a.textColor != null) el.style.color = a.textColor;
       el.style.transform = `translate(${x}px, ${y}px) scale(${t.scaleX * camera.zoom}, ${t.scaleY * camera.zoom}) rotate(${t.rotation}deg)`;
       el.style.opacity = node.opacity;
     }
