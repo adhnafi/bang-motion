@@ -1,6 +1,6 @@
 # Motionav — Plan 03: Minimal Core Prototype
 
-**Status:** COMPLETE  
+**Status:** IN VERIFICATION  
 **Date:** 2026-09-11  
 **Scope:** prove the smallest reusable engine kernel against the findings of the deep source audit.
 
@@ -14,7 +14,38 @@
 - [x] **Task 03.6 — DOM proof renderer**
 - [x] **Task 03.7 — Runtime contract**
 - [x] **Task 03.8 — Deterministic proof scene**
-- [x] **Task 03.9 — Verification notes**
+- [x] **Task 03.9 — Verification boundary**
+- [x] **Task 03.10 — Fix proof scene viewport/rendering**
+- [ ] **Task 03.11 — Manual browser re-check**
+
+## Task 03.10 — What changed
+
+The first manual screenshot showed the proof page positioned at the document origin with a large overflowing logical canvas. The root cause was the proof page's viewport fitting: the logical `1920 × 1080` stage was scaled but not centered as a fixed viewport.
+
+The proof page now:
+
+- locks the document to the browser viewport;
+- hides page scrollbars;
+- centers the logical stage with `position: fixed`;
+- applies `translate(-50%, -50%)` before scale;
+- starts the runtime in play mode after the initial deterministic frame.
+
+This keeps the logical viewport at `1920 × 1080` while fitting it to the browser window.
+
+## Manual verification protocol
+
+For the user, this task is intentionally reduced to one visual check:
+
+1. Refresh the existing proof URL.
+2. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
+3. Confirm that three nodes are visible inside one light stage.
+4. Confirm that the nodes/camera visibly move.
+
+If the result is correct, the user can simply report **"sudah benar"** or send a screenshot. No DevTools or console work is required unless the visual check fails.
+
+## Verification boundary
+
+Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.11 passes.
 
 ## What was intentionally not included
 
@@ -71,18 +102,10 @@ core/
 examples/
   plan03-core-proof/
     index.html
-    scene.js
 ```
-
-## Result
-
-Plan 03 establishes a minimal kernel that can become the base for Plan 04 (Quranav System Prototype) without putting Quranav-specific concepts into Core.
-
-### Verification limitation
-
-The files have been committed to the repository. Browser execution still requires opening the example through a local HTTP server because ES modules are used. This task does not claim a successful browser screenshot run from the connector environment.
 
 ## Change log for this plan
 
-**Additional task added:** Task 03.9 — Verification notes.  
-Reason: distinguish repository-level implementation completion from browser-runtime verification, so future plans do not confuse committed code with visually verified output.
+**Task 03.10 added and completed:** Fix proof scene viewport/rendering.  
+**Task 03.11 added:** Manual browser re-check.  
+Reason: the first user screenshot exposed a real presentation-layer defect, so visual verification must remain an explicit task rather than being implied by code completion.
