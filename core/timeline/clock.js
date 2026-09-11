@@ -10,6 +10,13 @@ export class TimelineClock {
     return this.time;
   }
 
+  advance(deltaSeconds) {
+    if (!this.playing) return this.time;
+    this.time += Math.max(0, Number(deltaSeconds) || 0);
+    if (this.time > this.duration) this.time = 0;
+    return this.time;
+  }
+
   play() { this.playing = true; }
   pause() { this.playing = false; }
 }
