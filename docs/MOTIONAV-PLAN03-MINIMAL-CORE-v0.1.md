@@ -1,6 +1,6 @@
 # Motionav — Plan 03: Minimal Core Prototype
 
-**Status:** IN VERIFICATION  
+**Status:** COMPLETE & VERIFIED  
 **Date:** 2026-09-11  
 **Scope:** prove the smallest reusable engine kernel against the findings of the deep source audit.
 
@@ -22,11 +22,22 @@
 - [x] **Task 03.14 — Manual playback re-check**
 - [x] **Task 03.15 — Strengthen playback proof and diagnostics**
 - [x] **Task 03.16 — Final manual playback re-check**
-- [ ] **Task 03.17 — Manual deterministic seek re-check**
+- [x] **Task 03.17 — Manual deterministic seek re-check**
 
-## Verification result so far
+## Verification result
 
-The user has confirmed that the proof now visibly plays and that the diagnostic HUD time/frame values change. This verifies the browser playback path. The screenshot also confirms the stage and three nodes render correctly.
+**PLAN 03 VERIFIED.**
+
+The user manually confirmed in the browser that:
+
+- the logical stage renders correctly without page scrollbars;
+- three nodes are visible in one continuous stage;
+- playback advances continuously;
+- the diagnostic HUD time/frame values change;
+- seeking to different times changes the visual state;
+- returning to the same seek time reproduces the same visible node positions.
+
+This is sufficient for the Plan 03 proof criteria. The verification is intentionally a user-level visual verification, not a claim of pixel-diff automation.
 
 ## Task 03.10 — What changed
 
@@ -52,19 +63,19 @@ The proof now exposes a small diagnostic HUD showing live timeline time and fram
 
 ## Task 03.16 — Manual playback re-check
 
-**PASS.** The user confirmed: the timeline/frame values change and the nodes visibly move.
+**PASS.** The user confirmed that the timeline/frame values change and the nodes visibly move.
 
 This closes the playback portion of Plan 03.
 
 ## Task 03.17 — Manual deterministic seek re-check
 
-**OPEN.** Playback is now proven, but deterministic seeking is a separate Core contract and should not be inferred from playback.
+**PASS.** The user tested multiple seek states and confirmed that returning to the same time reproduces the same visible state.
 
-The user test will be kept simple. The proof page should expose three temporary test controls or equivalent visible seek states so the user can confirm that returning to the same timeline time produces the same visual state. No DevTools should be required.
+This closes the deterministic seek portion of Plan 03.
 
 ## Verification boundary
 
-Plan 03 remains **IN VERIFICATION** until deterministic seek is manually confirmed. Code completion is not treated as browser verification.
+Plan 03 is now **COMPLETE & VERIFIED**. Browser verification was performed manually by the user. No claim is made that a machine-level pixel-diff test was run.
 
 ## What was intentionally not included
 
@@ -104,7 +115,7 @@ Repeated `seek(t)` calls must produce the same state. Randomness is not used in 
 4. Nodes are evaluated from timeline time.
 5. `seek(t)` is explicit.
 6. Playback advances time and renders frames.
-7. Repeated seek at the same time produces the same serialized state.
+7. Repeated seek at the same time produces the same serialized/visible state.
 8. Runtime is generic and does not know Quranav or Bang Motion styling.
 
 ## New repository surface
@@ -133,5 +144,5 @@ examples/
 **Task 03.14 added and completed:** Manual playback re-check.  
 **Task 03.15 added and completed:** Strengthen playback proof and diagnostics.  
 **Task 03.16 added and completed:** Final manual playback re-check.  
-**Task 03.17 added:** Manual deterministic seek re-check.  
-Reason: playback is now empirically confirmed, but deterministic seeking is a distinct requirement and must be verified independently before Plan 03 can close.
+**Task 03.17 added and completed:** Manual deterministic seek re-check.  
+Reason: playback and deterministic seek were verified separately because they are distinct Core contracts.
