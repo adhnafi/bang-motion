@@ -5,15 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Motionav Plan 03 Core Proof</title>
 <style>
-  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:system-ui,sans-serif}
   #stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;overflow:hidden;background:#eee;transform-origin:center}
   [data-motionav-id]{position:absolute;width:120px;height:120px;border-radius:16px}
   [data-motionav-id="a"]{background:#111}
   [data-motionav-id="b"]{background:#777}
   [data-motionav-id="c"]{background:#ccc}
+  #hud{position:fixed;left:18px;top:14px;z-index:10;padding:10px 14px;border-radius:10px;background:rgba(0,0,0,.78);color:#fff;font:600 14px/1.3 system-ui,sans-serif;letter-spacing:.02em}
 </style>
 </head>
 <body>
+<div id="hud">MOTIONAV CORE · STARTING</div>
 <div id="stage"></div>
 <script type="module">
 import { Viewport } from '../../core/composition/viewport.js';
@@ -32,6 +34,7 @@ scene.add(new Node({id:'b',x:820,y:360}));
 scene.add(new Node({id:'c',x:1450,y:430}));
 
 const stage = document.querySelector('#stage');
+const hud = document.querySelector('#hud');
 const renderer = new DOMRenderer(stage);
 const clock = new TimelineClock({duration:4});
 const runtime = new MotionavRuntime({
@@ -39,12 +42,12 @@ const runtime = new MotionavRuntime({
   evaluate(scene,t){
     scene.camera.x = 0;
     scene.camera.zoom = 1 + 0.12 * Math.sin(t * Math.PI / 4);
-    scene.get('a').transform.x = 180 + 120 * t / 4;
-    scene.get('a').transform.y = 420 + 50 * Math.sin(t * Math.PI / 2);
-    scene.get('b').transform.x = 820 + 180 * t / 4;
-    scene.get('b').transform.y = 360 + 70 * Math.sin(t * Math.PI / 2 + 1);
-    scene.get('c').transform.x = 1450 - 160 * t / 4;
-    scene.get('c').transform.y = 430 + 45 * Math.sin(t * Math.PI / 2 + 2);
+    scene.get('a').transform.x = 180 + 360 * t / 4;
+    scene.get('a').transform.y = 420 + 90 * Math.sin(t * Math.PI / 2);
+    scene.get('b').transform.x = 820 + 240 * Math.sin(t * Math.PI / 2);
+    scene.get('b').transform.y = 360 + 110 * Math.sin(t * Math.PI / 2 + 1);
+    scene.get('c').transform.x = 1450 - 360 * t / 4;
+    scene.get('c').transform.y = 430 + 90 * Math.sin(t * Math.PI / 2 + 2);
   }
 });
 
@@ -60,10 +63,12 @@ window.MOTIONAV={
   seek:t=>runtime.seek(t),
   snapshot:()=>runtime.snapshot(),
   play:()=>runtime.play(),
-  pause:()=>runtime.pause()
+  pause:()=>runtime.pause(),
+  get frame(){return runtime.frame}
 };
 runtime.seek(0);
 runtime.play();
+setInterval(()=>{hud.textContent=`MOTIONAV CORE · PLAYING · t=${clock.time.toFixed(2)}s · frame=${runtime.frame}`},100);
 </script>
 </body>
 </html>
