@@ -18,25 +18,28 @@
 - [x] **Task 03.10 — Fix proof scene viewport/rendering**
 - [x] **Task 03.11 — Fix duplicate proof nodes**
 - [ ] **Task 03.12 — Manual browser re-check**
+- [x] **Task 03.13 — Connect runtime playback to render loop**
+- [ ] **Task 03.14 — Manual playback re-check**
 
 ## Task 03.10 — What changed
 
 The first manual screenshot showed the proof page positioned at the document origin with a large overflowing logical canvas. The root cause was the proof page's viewport fitting: the logical `1920 × 1080` stage was scaled but not centered as a fixed viewport.
 
-The proof page now:
-
-- locks the document to the browser viewport;
-- hides page scrollbars;
-- centers the logical stage with `position: fixed`;
-- applies `translate(-50%, -50%)` before scale.
+The proof page now locks the document to the browser viewport, hides page scrollbars, centers the logical stage with `position: fixed`, and applies `translate(-50%,-50%)` before scale.
 
 ## Task 03.11 — What changed
 
 The first proof implementation contained three placeholder DOM nodes while `DOMRenderer.mount()` created three renderer-owned nodes. This produced duplicate nodes and meant the placeholder nodes could remain at the document origin.
 
-The proof now starts with an empty stage. The renderer owns the mounted nodes, while the proof stylesheet targets their `data-motionav-id` attributes for simple visual differentiation.
+The proof now starts with an empty stage and the renderer owns the mounted nodes.
 
-The proof animation itself is deliberately time-evaluated and does not require a live frame loop yet. This keeps Plan 03 focused on deterministic evaluation/seek rather than prematurely building playback infrastructure.
+## Task 03.13 — What changed
+
+Manual verification showed the stage and nodes rendered correctly but remained static. The cause was a real runtime gap: `TimelineClock.play()` only changed a boolean; no frame loop advanced time or re-rendered the scene.
+
+The runtime now owns a minimal `requestAnimationFrame` loop. Each frame advances the clock from elapsed real time, evaluates the scene at the new time, and renders it. `pause()` cancels the loop.
+
+This is a Core-level fix, not a proof-only animation hack, because playback belongs to the runtime contract.
 
 ## Manual verification protocol
 
@@ -46,13 +49,14 @@ For the user, this task is intentionally reduced to one visual check:
 2. Refresh the existing proof URL.
 3. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
 4. Confirm that three nodes are visible inside one light stage.
-5. Confirm that the proof is not blank or showing duplicate nodes.
+5. Confirm that the three nodes visibly move over time.
+6. Confirm that the camera/world relationship visibly changes as the animation plays.
 
-If the result is correct, the user can simply report **"sudah benar"** or send a screenshot. No DevTools or console work is required unless the visual check fails.
+No DevTools or console work is required unless the visual check fails.
 
 ## Verification boundary
 
-Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.12 passes.
+Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.14 passes.
 
 ## What was intentionally not included
 
@@ -91,8 +95,9 @@ Repeated `seek(t)` calls must produce the same state. Randomness is not used in 
 3. Camera abstraction exists and can be evaluated.
 4. Nodes are evaluated from timeline time.
 5. `seek(t)` is explicit.
-6. Repeated seek at the same time produces the same serialized state.
-7. Runtime is generic and does not know Quranav or Bang Motion styling.
+6. Playback advances time and renders frames.
+7. Repeated seek at the same time produces the same serialized state.
+8. Runtime is generic and does not know Quranav or Bang Motion styling.
 
 ## New repository surface
 
@@ -115,5 +120,7 @@ examples/
 
 **Task 03.10 added and completed:** Fix proof scene viewport/rendering.  
 **Task 03.11 added and completed:** Fix duplicate proof nodes.  
-**Task 03.12 added:** Manual browser re-check.  
-Reason: the user's second screenshot exposed that the first viewport fix did not address the duplicate-node coupling. The new task explicitly closes the visual verification loop.
+**Task 03.12 remains open:** Manual browser re-check.  
+**Task 03.13 added and completed:** Connect runtime playback to render loop.  
+**Task 03.14 added:** Manual playback re-check.  
+Reason: the user's visual check exposed a missing playback loop. This is a Core-level defect, so playback was added to the runtime before asking the user to re-test.
