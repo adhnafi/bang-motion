@@ -20,6 +20,8 @@
 - [ ] **Task 03.12 — Manual browser re-check**
 - [x] **Task 03.13 — Connect runtime playback to render loop**
 - [ ] **Task 03.14 — Manual playback re-check**
+- [x] **Task 03.15 — Strengthen playback proof and diagnostics**
+- [ ] **Task 03.16 — Final manual playback re-check**
 
 ## Task 03.10 — What changed
 
@@ -35,11 +37,15 @@ The proof now starts with an empty stage and the renderer owns the mounted nodes
 
 ## Task 03.13 — What changed
 
-Manual verification showed the stage and nodes rendered correctly but remained static. The cause was a real runtime gap: `TimelineClock.play()` only changed a boolean; no frame loop advanced time or re-rendered the scene.
+The first playback implementation exposed a real runtime gap: `TimelineClock.play()` changed a boolean but did not advance time or render subsequent frames.
 
 The runtime now owns a minimal `requestAnimationFrame` loop. Each frame advances the clock from elapsed real time, evaluates the scene at the new time, and renders it. `pause()` cancels the loop.
 
-This is a Core-level fix, not a proof-only animation hack, because playback belongs to the runtime contract.
+## Task 03.15 — What changed
+
+The user still observed no movement after the first playback fix. A second review hardened the frame scheduler so it cannot accidentally schedule duplicate or missing frames. The runtime now explicitly clears its pending RAF handle before processing a frame, then schedules exactly one next frame while playing.
+
+The proof scene was also made deliberately more visually obvious: node travel distances and vertical motion were increased. A small diagnostic HUD displays the live timeline time and frame count. This does not drive animation; it only exposes whether the Core playback loop is advancing.
 
 ## Manual verification protocol
 
@@ -49,14 +55,14 @@ For the user, this task is intentionally reduced to one visual check:
 2. Refresh the existing proof URL.
 3. Confirm that the page fills the browser viewport without horizontal/vertical page scrolling.
 4. Confirm that three nodes are visible inside one light stage.
-5. Confirm that the three nodes visibly move over time.
-6. Confirm that the camera/world relationship visibly changes as the animation plays.
+5. Confirm that the HUD changes from `STARTING` to `PLAYING` and its time/frame values increase.
+6. Confirm that the three nodes visibly move over time.
 
 No DevTools or console work is required unless the visual check fails.
 
 ## Verification boundary
 
-Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.14 passes.
+Code completion is not the same as browser verification. Plan 03 remains **IN VERIFICATION** until Task 03.16 passes.
 
 ## What was intentionally not included
 
@@ -123,4 +129,6 @@ examples/
 **Task 03.12 remains open:** Manual browser re-check.  
 **Task 03.13 added and completed:** Connect runtime playback to render loop.  
 **Task 03.14 added:** Manual playback re-check.  
-Reason: the user's visual check exposed a missing playback loop. This is a Core-level defect, so playback was added to the runtime before asking the user to re-test.
+**Task 03.15 added and completed:** Strengthen playback proof and diagnostics.  
+**Task 03.16 added:** Final manual playback re-check.  
+Reason: the user still observed a static proof after the first playback implementation, so the scheduler was hardened and the proof was instrumented with visible diagnostics before another manual check.
