@@ -7,6 +7,14 @@ model: flash
 commandExecutionPolicy: sandbox
 skills:
   - skills/motionav-implementation
+tools:
+  - view_file
+  - list_dir
+  - grep_search
+  - find_by_name
+  - replace_file_content
+  - write_to_file
+  - run_command
 ---
 
 # System Prompt
