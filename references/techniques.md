@@ -5,26 +5,30 @@ bukan hukum. Font, warna, dan konten selalu milik brand user.
 
 ## Daftar isi
 
-1. Tipografi hidup (split per huruf, pill sorotan, arah bergantian) + 1b. Kontras latar
+1. Tipografi hidup (split per huruf, penekanan & sorotan opsional, arah bergantian) + 1b. Kontras latar
 2. Motion blur berarah (pembeda utama dari "web animation")
-3. Kamera: push-through antar segmen
+3. Kamera: push-through (opsional, termotivasi)
+3b. Ukuran shot: kamera ke elemen (wide ↔ medium close-up ↔ close-up)
 4. Kamera: pan 3D menyusur kalimat per kata
 4b. Transisi antar adegan — hierarki yang benar
 5. Light leak transisi
 6. Glow yang benar (dan kapan tidak)
 7. Latar Three.js: nebula, debu, grid, ornamen 3D, bloom
+7b–7d. Latar terang & pergantian, gerak latar, permukaan latar (termasuk grainy gradient)
+7e. Menu gaya render objek (flat, clay, glossy, kaca, isometrik, emas, garis neon)
 8. Tile ikon & mockup UI
 9. Ketikan / angka hidup yang deterministik
+9b. Video sebagai layer footage (clip, sinkron timeline, ekspor)
 10. Jebakan (bug yang pernah terjadi)
 
 ---
 
-## 1. Tipografi hidup — resep dari opener yang DITERIMA vs yang DITOLAK
+## 1. Tipografi hidup — resep yang berhasil vs yang gagal
 
-Kasus nyata (6 Sep 2026). Opener A ditolak: "teks terlalu kaku". Setiap
+Dua pola yang sering muncul. Opener A terasa kaku: setiap
 judulnya KAPITAL SEMUA, satu font lebar bobot 800, selalu di tengah, masuk
-dengan stagger huruf yang sama, tanpa kata sorotan, tanpa variasi ukuran.
-Opener B disebut "perfect": kalimat sentence case bobot 500, SATU kata kunci
+dengan stagger huruf yang sama, tanpa penekanan apa pun, tanpa variasi ukuran.
+Opener B terasa hidup: kalimat sentence case bobot 500, SATU kata kunci
 per kalimat di dalam pill yang mengembang dari kiri + sparkle, tanda baca
 muncul terpisah setelahnya, ukuran dan arah masuk bergantian tiap adegan,
 sebagian kalimat diletakkan di dekat objeknya (bukan selalu di tengah), dan
@@ -32,16 +36,19 @@ adegan gelap bergantian dengan adegan terang. Resep B:
 
 > **Peringatan bentuk.** Di opener B, sorotannya berupa pill biru yang
 > mengembang dari kiri dengan bintang kecil (sparkle) di sudutnya. Itu
-> TANDA TANGAN proyek itu, bukan aturan. Yang jadi aturan hanya: satu kata
-> sorotan per kalimat. BENTUK sorotan dipilih di style brief dan konsisten
-> dalam satu video; ORNAMEN (bintang, titik, garis kilat) opsional dan
-> diturunkan dari bentuk brand/tema — kalau tidak ada alasan, tanpa ornamen.
+> TANDA TANGAN proyek itu, bukan aturan. Yang jadi aturan hanya: kalimat
+> punya penekanan. Sorotan kata adalah SATU cara dan OPSIONAL — banyak opener
+> yang baik tanpa sorotan sama sekali (kata per kata redup → penuh, ukuran,
+> jeda, ikon/UI di samping kata). Bila dipakai, BENTUK dipilih di style brief
+> dan konsisten dalam satu video, tidak wajib di setiap kalimat; ORNAMEN
+> (bintang, titik, garis kilat) opsional dan diturunkan dari bentuk brand.
 > Dua proyek berbeda dengan pill + bintang yang sama = menyalin kulit.
 
-**Menu bentuk sorotan** (pilih satu per video):
+**Menu penekanan** (pilih satu per video; `tanpa` adalah pilihan sah):
 
 | Varian | Rasa | Cocok untuk |
 |---|---|---|
+| `tanpa` — tidak ada bidang/garis; kata per kata redup → penuh, ukuran, jeda, atau ikon/UI di samping kata | tenang, produk yang bicara | SaaS, AI, brand minimal, pengumuman fitur |
 | `pill` — blok warna mengembang dari kiri | tegas, produk digital | app, SaaS, tech |
 | `under` — garis bawah tebal menggambar dari kiri | editorial, tenang | finansial, produktivitas, jurnalistik |
 | `marker` — coretan stabilo miring, sedikit transparan | hangat, manusiawi | edukasi, komunitas, kuliner |
@@ -58,7 +65,7 @@ adegan gelap bergantian dengan adegan terang. Resep B:
 .line.ink{color:var(--ink-dark);text-shadow:none}          /* versi untuk adegan terang */
 .wd{display:inline-block;white-space:nowrap}
 .ch{display:inline-block;will-change:transform,opacity,filter;opacity:0}
-.txt2{display:inline-block;opacity:0}                        /* tanda baca: pop terpisah */
+.txt2{display:inline-block;opacity:0}                        /* tanda baca OPSIONAL: hanya bila kalimat memang bertanda baca */
 /* kata sorotan: .hl + satu varian bentuk; <i> adalah bidang/garis yang digambar */
 .hl{position:relative;display:inline-block}
 .hl i{position:absolute;transform:scaleX(0);transform-origin:0 50%}
@@ -92,30 +99,38 @@ const mark=(hl,at)=>{const i=$('i',hl);if(i)tl.fromTo(i,{scaleX:0},{scaleX:1,dur
   const orn=$('.hl-orn',hl);if(orn)tl.fromTo(orn,{opacity:0,scale:.2,rotate:-40},{opacity:1,scale:1,rotate:0,duration:.5,ease:'back.out(2)',immediateRender:false},at+.22);};
 const popDot=(el,at)=>tl.fromTo(el,{opacity:0,yPercent:60},{opacity:1,yPercent:0,duration:.5,ease:'power4.out',immediateRender:false},at);
 ```
-Urutan satu kalimat: `inUp(ch)` → 0,4–0,6 dtk kemudian `mark(hl)` → `popDot(txt2)`
-0,25 dtk setelahnya. Kata sorotan adalah klaim utamanya; sisanya pengantar.
+Urutan satu kalimat dengan sorotan: `inUp(ch)` → 0,4–0,6 dtk kemudian `mark(hl)` →
+`popDot(txt2)` 0,25 dtk setelahnya — HANYA bila kalimatnya memang bertanda baca. Tanpa
+sorotan: pintu teks saja (mis. per kata atau redup → penuh); hapus span `.hl`, dan hapus
+`.txt2` bila kalimat tidak bertanda baca (default untuk judul dan klaim).
 
-**Aturan keras tipografi (dari penolakan A):**
+**Aturan keras tipografi (dari kegagalan A):**
 1. Sentence case, bobot 500–600. KAPITAL SEMUA + bobot 800 + font lebar
    hanya untuk SATU adegan penekanan, bukan semua.
-2. Setiap kalimat punya satu kata sorotan; BENTUKNYA dari menu di atas,
-   dipilih di style brief, satu bentuk per video, berbeda dari proyek
-   sebelumnya. Ornamen tidak default. Kalimat tanpa sorotan hanya boleh
-   untuk kalimat pendek ≤ 3 kata.
+2. Sorotan kata OPSIONAL — diputuskan di style brief, bukan bawaan. Bila
+   dipakai: bentuk dari menu di atas, satu bentuk per video, tidak wajib di
+   setiap kalimat, berbeda dari proyek sebelumnya; ornamen tidak default.
+   Bila tidak: penekanan dari urutan kata, ukuran/bobot, redup → penuh, jeda,
+   atau objek di samping kata. Yang ditolak tetap kalimat datar tanpa
+   penekanan apa pun.
 3. Dua adegan berturut-turut tidak boleh sama dalam: ukuran (sm/md/lg/xl),
    arah masuk (inUp/inLeft), posisi (tengah / dekat objek / kiri-atas).
 4. Kalimat panjang dipecah dua baris dengan bobot berbeda (500 lalu 600),
    atau baris kedua jadi `.txt2` yang pop menyusul.
-5. Tanda baca (? . !) selalu elemen terpisah yang muncul terakhir — itu
-   "ketukan" kalimatnya.
+5. Judul, klaim, dan frase pendek DEFAULT TANPA TITIK (terutama ≤ 4 kata atau satu
+   baris). Tanda baca hanya bila mengubah arti atau irama: `?` untuk pertanyaan
+   sungguhan, titik untuk gaya dua kalimat pendek berturut-turut yang disengaja, `!`
+   sangat jarang. Gayanya diputuskan sekali di style brief dan konsisten. Bila dipakai,
+   tanda baca adalah elemen terpisah yang muncul terakhir (`.txt2` + `popDot`) — tetapi
+   jangan menambah titik hanya karena resepnya punya `popDot`.
 6. Teks yang menempel pada objek (mockup, kartu) diposisikan di sisinya
    (`.pos` + left/top), bukan dipaksa ke tengah di atas objek.
 
 ## 1b. Kontras: latar tunduk pada teks
 
-Kasus nyata yang sama: 96 batang cahaya putih dengan bloom aditif lebih
-terang daripada judulnya → huruf putih kehilangan tepi ("background ngga
-jelas, ngga kontras"). Aturan yang bisa diukur:
+Contoh kegagalan: 96 batang cahaya putih dengan bloom aditif lebih
+terang daripada judulnya → huruf putih kehilangan tepi dan latar terasa
+ramai tanpa kontras. Aturan yang bisa diukur:
 - **Kantong teks**: di area teks, luminance latar ≤ 25 % (gelap) untuk
   teks putih, atau ≥ 80 % (terang) untuk teks ink. Bila latar ramai,
   letakkan `.pocket` (radial-gradient gelap 55 % → transparan) di bawah
@@ -148,9 +163,10 @@ blur.setAttribute('stdDeviation', `${v} ${v*0.08}`);   // gerak horizontal
 Pasang filter saat tween mulai, LEPAS saat selesai (`filter:'none'`) —
 elemen yang terus memakai filter SVG dirasterisasi ulang tiap frame, mahal.
 
-## 3. Kamera: push-through antar segmen
+## 3. Kamera: push-through (opsional, termotivasi)
 
-Transisi paling penting. Tiga langkah pada rig `#world` (dunia utuh):
+Salah satu transisi dari menu §4c — jatah ±1 per video, hanya bila ada alasan
+(§4b), bukan transisi antar semua segmen. Tiga langkah pada rig `#world` (dunia utuh):
 
 ```js
 const camThrough = (atCut, {push=2.0, from=1.5, inDur=.5, outDur=.95,
@@ -170,6 +186,69 @@ const camThrough = (atCut, {push=2.0, from=1.5, inDur=.5, outDur=.95,
   untuk adegan yang teksnya di atas) — zoom harus menuju subjek.
 - Sinkron dengan kamera WebGL (`camZ`) menambah kedalaman, tapi rig DOM
   yang membawa perasaan "kamera".
+
+## 3b. Ukuran shot — kamera ke elemen (supaya tidak statis)
+
+"Zoom in-out" dalam motion graphic berarti **pergantian ukuran shot**: kamera mendekat ke
+satu elemen yang sedang bercerita, lalu mundur lagi. Napas kamera beberapa persen (§4b)
+hampir tidak terlihat — itu lapisan dasar, bukan jawaban bila video terasa statis.
+
+**Kosakata shot** (skala dihitung dari ukuran elemen, bukan angka tetap)
+- **Wide** — seluruh komposisi terlihat; dipakai saat banyak elemen atau teks lebar perlu
+  dibaca bersama.
+- **Medium close-up** — elemen utama beserta sedikit konteksnya; target mengisi kira-kira
+  sepertiga sampai setengah frame.
+- **Close-up** — satu elemen atau detailnya mengisi sebagian besar frame; dipakai untuk
+  penekanan, momen aksi, atau detail kecil yang harus terbaca.
+
+**Memilih target dan waktu**
+- Titik fokus = pusat elemen yang *sedang* bercerita: teks yang baru muncul, benda yang
+  tiba, tombol yang diklik, detail yang disebut kalimat. Kamera menyambut, bukan mengejar.
+- Shot berganti mengikuti ketukan isi. Pola yang umum: dekat ke elemen A → mundur ke wide
+  saat komposisi butuh seluruh frame → dekat ke elemen B. Variasikan ukuran; dua shot
+  dengan ukuran sama berturut-turut terasa datar.
+- Dua tempo gerak: **perpindahan shot** (ringkas, ease in-out) dan **push pelan saat
+  menahan** (lambat, ease sine) supaya hold tidak mati.
+- Di titik cut, kamera boleh langsung berada di close-up tanpa tween — adegan lahir dekat,
+  lalu mundur. Video pun boleh dibuka sudah dalam close-up.
+- Penutup yang ditahan (logo, CTA) tetap diberi push pelan; jangan membeku.
+- Hindari bolak-balik dekat–jauh lebih cepat daripada pembaca sempat membaca atau
+  melihat — terasa pusing. Teks muncul setelah kamera tiba, bukan di tengah perpindahan.
+
+**Rig**
+```js
+const CAM = {s:1, fx:W/2, fy:H/2};                       // skala + titik fokus (koordinat dunia)
+const shot  = (at, dur, s, fx, fy, ease='power2.inOut') => tl.to(CAM, {s, fx, fy, duration:dur, ease}, at);
+const cutTo = (at, s, fx, fy) => tl.set(CAM, {s, fx, fy}, at);   // lompat di titik cut
+// ukuran dari elemen: fill ≈ bagian frame yang diisi target (close-up besar, medium close-up sedang)
+const rectIn = (el, root) => { let x = 0, y = 0, n = el;
+  while (n && n !== root) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+  return {x, y, w: el.offsetWidth, h: el.offsetHeight}; };          // elemen SVG: pakai getBBox()
+const frameOn = (el, fill) => { const r = rectIn(el, world);
+  return [Math.max(1, Math.min(W * fill / r.w, H * fill / r.h)), r.x + r.w / 2, r.y + r.h / 2]; };
+// di render(t):
+function applyCam(t){
+  const s = CAM.s * (1 + .01 * Math.sin(t * .7));                  // napas halus di atas shot (opsional)
+  let tx = W/2 - CAM.fx * s, ty = H/2 - CAM.fy * s;
+  tx = Math.min(0, Math.max(W - W * s, tx)); ty = Math.min(0, Math.max(H - H * s, ty));   // tepi dunia tak tersingkap
+  world.style.transform = `translate(${tx}px,${ty}px) scale(${s})`; }
+// contoh: shot(T, .8, ...frameOn($('#judul'), .6)); shot(T + 2, .7, 1, W/2, H/2);
+```
+- Satu sistem skala per pembungkus: bila adegan memakai `shot()`, jangan sekaligus men-tween
+  `scale` pada `#world` dari `breathe()`/push-through; tumpuk napas di dalam `applyCam`.
+  Starter explainer sudah punya padanannya: `look()` = shot ke titik, `home()` = wide.
+- Dunia/latar harus lebih luas dari frame (overscan) supaya klem tepi tidak mengunci shot.
+
+**Lapisan**
+- Elemen yang merupakan bagian dunia ikut zoom. Label, caption, dan antarmuka layar
+  diletakkan di lapisan layar (HUD) di luar rig, supaya tidak membesar atau terpotong tepi.
+- Kamera lokal boleh dipasang per babak (mis. mendekat ke area klik, atau reveal yang
+  ditarik mundur dari skala besar) tanpa mengganggu kamera dunia. Getaran impact di
+  pembungkus terpisah.
+
+**Periksa**
+- Potret di puncak tiap shot: teks tidak terpotong tepi, tepi dunia tidak tersingkap.
+- Aset raster cukup tajam untuk skala close-up (resolusi ≥ skala × ukuran tampil).
 
 ## 4. Pan 3D menyusur kalimat
 
@@ -194,14 +273,14 @@ melengkung; kamera WebGL ikut geser `camX` searah untuk paralaks latar.
 
 ## 4b. Transisi antar adegan — hierarki yang benar
 
-Dua generasi transisi ditolak user sebelum ketemu yang benar:
-whip translasi ("gap hitam, pindah halaman"), lalu spin/yaw/roll kejut
-("kaya editan CapCut" — zoom tiba-tiba + blur adalah bahasa preset editor
-video, bukan motion design). Urutan yang benar:
+Dua jenis transisi yang terasa murahan: whip translasi (menyingkap gap
+hitam, terbaca "pindah halaman"), dan spin/yaw/roll kejut (zoom tiba-tiba +
+blur adalah bahasa preset editor video, bukan motion design). Urutan yang benar:
 
 1. **Kamera bernapas** (fondasi, selalu aktif): rig dunia drift zoom pelan
    `sine.inOut` ±4-5% per adegan, arah bergantian, dirantai tanpa lompatan.
-   Kamera tidak pernah diam dan tidak pernah menyentak.
+   Kamera tidak pernah diam dan tidak pernah menyentak. Napas ini hanya lapisan
+   dasar — tidak terbaca sebagai "zoom in-out"; untuk itu pakai ukuran shot (§3b).
 2. **Koreografi elemen beririsan**: elemen adegan lama keluar (cepat,
    `power2.in`, blur berarah) SAMBIL elemen adegan baru masuk — irisan
    waktunya yang membuat perpindahan terasa hidup, bukan efek kameranya.
@@ -211,19 +290,20 @@ video, bukan motion design). Urutan yang benar:
    lintasan diagonal `power1.inOut` ~1 detik, puncak skala tepat di cut,
    arah bergantian antar pemakaian. Awas tween lama yang masih menulis
    properti ornamen yang sama — ia membunuh wipe (cek overlap waktu).
-4. **Zoom termotivasi** (jatah ±1 per video): push-through HANYA bila ada
-   alasannya — menyelam ke layar mockup, masuk ke lubang logo. Zoom tanpa
-   motivasi terasa efek kejut.
+4. **Zoom termotivasi**: push-through sebagai TRANSISI (jatah ±1 per video) HANYA
+   bila ada alasannya — menyelam ke layar mockup, masuk ke lubang logo. Zoom tanpa
+   motivasi terasa efek kejut. Jatah ini khusus zoom transisi: kamera yang mendekat
+   ke area UI yang sedang diklik lalu mundur lagi adalah bahasa demo, bukan efek
+   kejut, dan tidak dihitung jatah (§8 "Kamera mengikuti interaksi UI").
 
 Element-driven exit tetap resep bagus: elemen lama terbang MELEWATI lensa
 (scale ~2.2 + blur + stagger), kamera cuma menyusul halus (tanpa lompatan).
 
 ### 4c. Menu transisi — bukan balok persegi yang menyapu
 
-Kasus nyata: dua opener berturut-turut memakai "object wipe" berupa balok
-warna datar raksasa yang melintas miring ("kotak persegi aneh"), karena
-contoh di skill menyebut wipe objek lebih dulu. Opener yang diterima
-memakai kedalaman: push-through 3D, kartu kaca yang berputar masuk, tile
+Kegagalan yang umum: "object wipe" berupa balok warna datar raksasa yang
+melintas miring terasa aneh dan murah, dan mudah terulang bila contoh menyebut
+wipe objek lebih dulu. Opener yang berhasil memakai kedalaman: push-through 3D, kartu kaca yang berputar masuk, tile
 yang `rotateY` dari kedalaman, elemen yang melewati lensa dengan ketebalan.
 Pilih dari menu ini; dalam satu video minimal DUA jenis, minimal SATU yang
 berkedalaman (3D/perspektif), dan wipe paling banyak dua kali:
@@ -245,6 +325,15 @@ frame, garis tipis menyapu, dan satu jenis transisi yang diulang di semua
 cut. Wipe boleh hanya bila objeknya bermakna dan punya kedalaman (kartu
 kaca, logo ekstrusi, tile), bukan bidang datar.
 
+Transisi tanpa cut yang dibawa objek (benda adegan baru menjadi wipe, keluar dari
+layar, match cut bentuk + ganti gaya render, tarik mundur menyingkap tujuan, tangan
+penjemput, menembus simbol, parade mendorong, putar tipis → kartu warna membuka,
+halaman naik bertumpuk, titik tumbuh, wadah mekar/menyusut, hasil menjauh jadi
+kalimat, zoom ke potongan UI, meredup lalu berganti, hapus-ketik) ada di `opener-konsep.md` → "Menu transisi yang
+dibawa benda". Medan warna palet yang MENJADI latar babak berikutnya — logo tetap di
+tempat dan berbalik warna di garis medan — bukan balok dekoratif yang lewat: boleh,
+paling banyak dua kali per video.
+
 ## 5. Light leak transisi
 
 Bukan garis cahaya menyapu (terlihat murahan), tapi bola cahaya lembut yang
@@ -262,8 +351,8 @@ Pelajaran yang mahal: **glow di semua judul = teks kusam dan norak**.
 
 - Judul: putih penuh + `text-shadow: 0 4px 28px rgba(0,0,0,.5)` saja
   (drop shadow keterbacaan, bukan glow).
-- Glow disimpan untuk OBJEK: tile ikon (rim border terang + inner glow naik
-  dari bawah), input/search pill, ornamen, bar spektrum.
+- Glow disimpan untuk OBJEK produk: tile/kartu (rim border terang + inner glow
+  naik dari bawah), mockup, ornamen, bar spektrum — objek yang memang ada di konsep.
 - Elemen realistis (baris app store, tombol) TANPA glow sama sekali —
   makin realistis elemennya, makin salah glow-nya.
 - Bloom WebGL: `threshold ≥ 0.5`. Threshold rendah membuat latar ikut mekar
@@ -286,8 +375,8 @@ Lapisan dari belakang ke depan, semua diikat `state`:
   sinus ±0.55 rad, JANGAN putar penuh (benda pipih dilihat dari samping =
   sebatang garis). Satu ornamen "hero" melintas cepat saat transisi.
 - **Tunnel/rush**: partikel PENDEK (len 0.8–2.5), warna gelap-sedang,
-  ≤300 buah, opasitas ≤0.6 — versi garis panjang putih pernah ditolak
-  karena "terlalu rame, teks tidak kontras".
+  ≤300 buah, opasitas ≤0.6 — versi garis panjang putih terlalu ramai
+  dan membuat teks tidak kontras.
 - **Bloom**: `UnrealBloomPass(strength .75–.95, radius .7, threshold .52)`,
   + denyut kecil mengikuti beat.
 - **Kamera WebGL**: dolly `camZ` per adegan + handheld sway sinus lambat +
@@ -322,28 +411,31 @@ tl.to('.paper .b',{x:60,y:-40,duration:3,ease:'sine.inOut',yoyo:true,repeat:1,st
 /* di t=0 (loop): kembalikan semuanya */
 tl.set('#paper',{autoAlpha:0},0); tl.set(['#gl','.vignette','.bgfx'],{opacity:1},0);
 ```
-Kapan berganti: diputuskan per segmen di style brief — ganti bila mood
-atau topik segmen berubah (masalah → solusi, klaim → produk, isi → CTA);
-jangan ganti hanya demi variasi. Bumper 5 detik atau opener satu mood boleh
-satu latar. Yang tidak sah adalah latar yang tidak pernah dipertimbangkan:
-gelap otomatis karena starter-nya gelap. Bila berganti: selalu di titik cut
-(camThrough/wipe/leak), tidak pernah cross-fade di tengah adegan; teks ganti
+Kapan berganti: kapan pun dibutuhkan, direncanakan di style brief — mood
+atau topik segmen berubah (masalah → solusi, klaim → produk, isi → CTA),
+brand warna-warni menuntut ritme warna (medan warna palet bergantian), atau
+aksi di layar mengubahnya (toggle dinyalakan, benda menutup lensa, ikon
+membesar memenuhi frame). Bumper pendek atau opener satu mood boleh satu
+warna latar, tetapi latar itu tetap BERGERAK (§7c) — latar diam ditolak.
+Yang tidak sah: latar yang tidak pernah dipertimbangkan (gelap otomatis
+karena starter-nya gelap) dan pergantian tanpa pemicu. Bila berganti: di
+titik cut/ketukan, di balik wipe/benda (camThrough/wipe/leak), atau sebagai
+akibat aksi di layar — tidak pernah cross-fade tanpa sebab; teks ganti
 varian (`.ink`) dan kantong gelap (`.pocket`) dimatikan di adegan terang;
 vignette diringankan (0,3–0,4), bloom WebGL dimatikan. Gradien terang
 contoh: `background:linear-gradient(160deg,color-mix(in srgb,var(--accent-lit) 30%,#fff),#fff 55%,color-mix(in srgb,var(--accent) 14%,#fff))`.
 
 ## 7c. Menu gerak latar — "gerak tiap detik" bukan berarti benda melintas
 
-Kasus nyata: dua opener berturut-turut untuk produk berbeda sama-sama
-memakai batang/potongan cahaya yang melesat ke samping (disebut "lane" di
-satu proyek, "range" di proyek lain). Penyebabnya aturan lama "gerak harus
-ada di dunia (objek melintas) tiap detik" — model memilih cara termurah
-lalu mencari alasannya dari produk. Gerak latar dipilih di style brief dari
+Kegagalan yang umum: opener untuk produk berbeda sama-sama memakai
+batang/potongan cahaya yang melesat ke samping, karena aturan "gerak harus
+ada di dunia (objek melintas) tiap detik" dibaca sempit — model memilih cara
+termurah lalu mencari alasannya dari produk. Gerak latar dipilih di style brief dari
 menu ini, dan harus berbeda dari proyek sebelumnya:
 
 | # | Bahasa gerak latar | Rasa | Catatan |
 |---|---|---|---|
-| 1 | Latar diam bertekstur + kamera bernapas saja | tenang, mahal | cukup untuk banyak opener; gerak datang dari kamera dan objek |
+| 1 | Latar bertekstur + kamera bernapas + satu gerak halus (tint/cahaya/grain bergeser pelan) | tenang, mahal | pilihan paling tenang yang masih sah; latar yang benar-benar diam ditolak |
 | 2 | Gradien besar yang berpindah/berputar pelan (2–3 warna palet) | lembut, modern | `background-position`/sudut di-tween 8–15 dtk |
 | 3 | Blob warna mengambang (2–4 lingkaran blur) | ramah, ringan | ikut palet; drift ±60 px, 4–6 dtk |
 | 4 | Grain/tekstur kertas yang hidup (offset mask per frame dari t) | organik, cetak | jangan noise acak — offset dari `t` |
@@ -354,12 +446,15 @@ menu ini, dan harus berbeda dari proyek sebelumnya:
 | 9 | Teks hantu raksasa bergeser lambat di belakang | editorial | kontras rendah ≥ .12, satu gaya |
 | 10 | Foto/ilustrasi tema dengan Ken Burns + parallax 2 lapis | naratif | butuh gradasi gelap di sisi teks |
 | 11 | Aliran horizontal (streak/lane/range/hujan partikel) | kecepatan, data | HANYA bila tema = kecepatan/aliran; sudah dipakai dua proyek berturut → hindari kecuali dengan cara yang jelas baru |
+| 12 | Medan warna palet bergantian (sapuan/snap 0,15–0,3 dtk, dipicu benda, aksi UI, atau ketukan) | pop, energik | untuk brand warna-warni; tiap medan diisi bentuk flat/objek yang bergerak |
 
 Aturan: satu bahasa per opener (boleh dua bila latar berganti antar
 segmen), ditulis di style brief pada baris "gerak latar", terpisah dari
 "tanda tangan gerak" (yang menggerakkan OBJEK/teks, bukan latar). Menu ini
-juga berlaku untuk latar WebGL §7: nebula diam + kamera bernapas adalah
-#1, debu naik adalah #7; "tunnel/rush" adalah #11.
+juga berlaku untuk latar WebGL §7: nebula yang berdrift pelan + kamera bernapas
+adalah #1, debu naik adalah #7; "tunnel/rush" adalah #11. Latar tidak pernah
+diam di adegan mana pun; pergantian warna latar (§7b) boleh ditambahkan di atas
+bahasa gerak mana pun.
 
 ## 7d. Menu permukaan latar — gradien, cahaya, tekstur (jangan flat)
 
@@ -376,14 +471,91 @@ bebas diubah):
 /* d. spotlight + tint   */ background:radial-gradient(55% 60% at 50% 40%,color-mix(in srgb,var(--accent) 18%,var(--base)),var(--base) 75%);
 /* e. langit berlapis    */ background:linear-gradient(180deg,#cfe0f5 0%,#f5efe3 100%); + pita warna tipis 2–3 lapis dengan opacity .2–.4
 /* f. tekstur + tint     */ kertas/grain (feTurbulence) di atas a/b/c dengan mix-blend-mode:multiply/overlay, opacity .1–.3
+/* g. grainy gradient    */ gradien jenuh 2–3 warna di BENTUK dan latar + lapisan butiran halus di atas semuanya (resep di bawah)
 ```
-Aturan: flat satu warna hanya untuk arah "poster color-block", dan itu pun
-diberi grain/tekstur halus. Setiap latar punya ≥ 2 lapis (dasar + cahaya/
+Aturan: flat satu warna hanya untuk arah "poster color-block" (diberi
+grain/tekstur halus) dan "flat pop berfoto" (medan flat sah karena berganti
+cepat dan selalu diisi bentuk flat/objek yang bergerak). Setiap latar punya ≥ 2 lapis (dasar + cahaya/
 tekstur/blob). Warna latar dari palet tema, bukan hitam/putih murni.
+
+### Grainy gradient (gradien berbutir)
+
+Istilah populernya *grainy gradient* atau *noisy gradient*: gradien warna jenuh yang
+lembut ditambah butiran halus merata. Butiran membuat gradien terasa cetak/analog, dan
+sekaligus menjadi dither yang mencegah banding (garis tangga) saat video dikompres.
+
+**Ciri gaya**
+- Gradien diletakkan DI BENTUK, bukan hanya di latar: lingkaran, lengkung, lubang,
+  kelopak, lapisan konsentris. Tiap bentuk bercahaya dari dalam lalu memudar ke warna
+  dalam/gelap; tepinya tetap tajam, isinya lembut.
+- Palet 2–3 warna yang berjauhan (mis. biru ↔ oranye, teal ↔ krem, ungu ↔ merah muda) di
+  atas dasar gelap atau warna dalam.
+- Butiran monokrom halus di seluruh frame (latar DAN objek), intensitas sama di terang
+  dan gelap — bukan bintik besar, bukan debu.
+- Gerak tenang: lapisan membuka/berputar pelan, kamera menembus lubang bentuk, satu bola
+  cahaya kecil memandu mata.
+
+**Resep**
+```html
+<svg width="0" height="0" style="position:absolute"><filter id="grain" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/>
+  <feColorMatrix type="saturate" values="0"/></filter></svg>
+<div class="grain" id="grain"></div>   <!-- lapisan teratas, di atas latar dan objek -->
+```
+```css
+.shape{background:radial-gradient(60% 60% at 50% 30%,var(--c-lit),var(--c-mid) 45%,var(--c-deep) 100%)}
+.grain{position:absolute;inset:-60px;pointer-events:none;filter:url(#grain);opacity:.22;mix-blend-mode:overlay}
+```
+```js
+/* butiran hidup yang deterministik: posisi melompat 12× per detik dari t, bukan Math.random */
+const grainAt=t=>{const k=Math.floor(t*12);grainEl.style.transform=`translate(${k*37%60-30}px,${k*61%60-30}px)`;};
+```
+- Latar gelap: overlay/soft-light, opacity .15–.3. Latar terang: multiply, opacity .08–.15.
+- `baseFrequency` .65–.9 pada 1920×1080 memberi butiran 1–2 px; lebih halus dari itu
+  hilang saat encode.
+- WebGL: tambahkan di akhir fragment shader
+  `col += (hash(gl_FragCoord.xy + floor(uTime*12.)) - .5) * .06;` — lebih ringan daripada
+  filter SVG layar penuh.
+- Preview real-time berat dengan filter SVG layar penuh: buat sekali tile noise 256 px di
+  canvas lalu pakai sebagai `background-image` berulang. Untuk render per frame keduanya aman.
+
+**Jaga-jaga**
+- Butiran dan gradien halus rusak oleh kompresi: encode dengan `-crf 10–12 -tune grain`
+  (libx264) atau bitrate tinggi, lalu periksa MP4-nya — bukan hanya browser. Video yang
+  diunggah ulang di resolusi rendah kehilangan butiran dan memperlihatkan banding; butiran
+  yang sedikit lebih besar lebih tahan.
+- Kantong teks tetap diuji kontras; teks kecil boleh diletakkan di atas lapisan grain supaya
+  hurufnya tidak tampak kotor.
+- Grainy gradient adalah kulit, bukan kerangka: konsep dan transisi tetap dari
+  `opener-konsep.md`.
+
+## 7e. Menu gaya render objek — satu keluarga per video
+
+Objek (ikon, benda, maskot, perangkat) bisa dirender dengan banyak bahasa material.
+Pilih satu keluarga per video, atau dua bila pergantiannya dijadikan momen (bentuk flat
+berputar dan ternyata benda 3D). Mencampur tanpa alasan terasa seperti kumpulan aset stok.
+
+| Gaya render | Ciri | Cara di web | Cocok untuk |
+|---|---|---|---|
+| Flat solid | isi warna rata, tanpa bayangan, bentuk geometris | SVG/CSS | app konsumen, edukasi, infografik |
+| Flat + titik warna | lingkaran palet berbagai ukuran tersebar, bergerak elastis di sekitar objek | SVG + GSAP | brand ceria, logo reveal |
+| Soft 3D / clay | matte pastel, sudut membulat tebal, bayangan lembut | Three.js `MeshStandardMaterial` roughness .7–.9, atau gambar hasil generator | fintech ramah, edukasi, produktivitas |
+| Glossy 3D | plastik mengilap, rim light, pantulan lingkungan | `MeshPhysicalMaterial` clearcoat 1 + envMap | tech, keamanan, gaming |
+| Kaca / bola bercahaya | transparan, pembiasan, inti bercahaya | `MeshPhysicalMaterial` transmission 1 + bloom kecil | AI, portal, pemandu mata |
+| Isometrik | sudut 30°, tanpa perspektif, blok rapi | transform isometri CSS atau kamera ortografik | properti, SaaS, peta proses |
+| Logam/marmer realistis | PBR, kedalaman bidang, gelap sinematik | Three.js PBR + HDRI + DOF, atau render/generator diimpor sebagai lapisan | penghargaan, mewah, event |
+| Garis neon di gelap | outline tipis bercahaya, lengkung/bingkai berlapis | SVG stroke + glow tipis, atau garis Three.js | tech, musik, portal |
+| Ilustrasi karakter flat | tokoh vektor, warna hangat, tekstur tipis | SVG/PNG berlapis | komunitas, layanan, explainer |
+
+- Objek realistis (logam, marmer, perangkat) paling efisien dibuat sebagai gambar/video dari
+  generator atau render 3D, lalu dianimasikan sebagai lapisan (parallax, masuk/keluar, DOF
+  palsu) — jangan memaksa Three.js bila hasilnya jauh di bawah.
+- Gaya render ditulis di style brief dan berbeda dari proyek sebelumnya.
 
 ## 8. Tile ikon & mockup UI
 
-**Tile ikon** (pengganti daftar poin): rounded-square ±210px, rim border
+**Tile ikon** (SATU opsi menyajikan fitur, bukan default — menu lengkap di
+`opener-konsep.md`; jumlah mengikuti fitur, tidak selalu tiga): rounded-square ±210px, rim border
 aksen terang 2px, inner glow naik dari bawah (radial di 50% 115%), ikon
 stroke putih 3.5–4.5 + `drop-shadow`, label 1–2 kata di bawah. Masuk
 `back.out(1.9)` stagger 0.15.
@@ -395,13 +567,110 @@ dinilai sebagai "aplikasinya", bukan dekorasi. Elemen hidup di dalamnya
 latar 3D supaya konsisten. Masuk sebagai OBJEK (naik dari bawah frame,
 rotateY ±10–24° dengan parent `perspective`), bukan sebagai kolom layout.
 
+**Animasi UI app/SaaS** — UI dirakit dari komponen, dipakai (kursor/jari/aksi UI), data
+hidup, dan transisi yang dibawa UI (panel mekar, lencana menyusut, karusel jendela):
+panduan layout-warna-ritme dan menu gerak di `opener-konsep.md` bagian "Animasi UI
+untuk app & SaaS".
+
+**Kamera mengikuti interaksi UI** — supaya demo tidak statis dan jelas apa yang diklik.
+UI penuh di frame dengan hanya kursor yang bergerak terasa seperti rekaman layar diam, dan
+klik yang kecil tidak terbaca. Bila sebuah klik penting untuk cerita, kamera ikut:
+
+1. **Dekati sebelum klik**: 0,3–0,5 dtk sebelum kursor tiba, kamera zoom ke area target
+   (scale 1,4–2,2, `power2.inOut` 0,6–0,9 dtk); target sedikit di atas tengah frame.
+2. **Klik terbaca**: kursor berhenti ±0,2 dtk, tombol tertekan (scale .92 → 1), sorot
+   tipis pada tombol; kamera nyaris diam saat klik.
+3. **Ikuti hasilnya**: kamera mundur ke lebar atau bergeser ke panel yang berubah
+   (0,7–1 dtk), tidak melompat.
+4. **Pilih, jangan semua**: 1–3 klik penting per babak mendapat zoom; klik lain cukup di
+   kamera lebar atau pan pelan. Adegan UI yang memang tenang (dasbor dipamerkan, data
+   mengisi) boleh tanpa zoom. Hindari zoom masuk-keluar bolak-balik lebih cepat dari
+   ±1,5 dtk — terasa pusing.
+5. Halus, tanpa blur radial — berbeda dari zoom hentak.
+
+```js
+/* ui = pembungkus seluruh UI + kursor (position:relative; transform-origin:0 0), berada di dalam
+   frame ber-overflow:hidden. target = elemen di dalam ui (ui sebagai offsetParent). */
+const camTo=(ui,target,at,{s=1.8,dur=.8,fy=.45}={})=>{
+  const W=ui.offsetWidth,H=ui.offsetHeight;
+  const cx=target.offsetLeft+target.offsetWidth/2, cy=target.offsetTop+target.offsetHeight/2;
+  tl.to(ui,{x:W/2-cx*s,y:H*fy-cy*s,scale:s,duration:dur,ease:'power2.inOut'},at);};
+const camWide=(ui,at,dur=.9)=>tl.to(ui,{x:0,y:0,scale:1,duration:dur,ease:'power2.inOut'},at);
+/* pola: camTo(ui,btn,T-.5) → klik di T → camWide(ui,T+.6) atau camTo(ui,panelBaru,T+.6,{s:1.3}) */
+```
+Kursor berada DI DALAM `ui` supaya ikut membesar bersama tombolnya. Target yang bersarang
+dalam elemen ber-posisi lain: hitung posisinya dengan menjumlahkan `offsetLeft/Top` sampai `ui`.
+
 ## 9. Ketikan & angka hidup (deterministik)
+
+Ketikan untuk teks yang memang diketik di dunia konsep (pesan, perintah, pencarian
+yang jadi inti produk) — bukan kotak input yang ditaruh di setiap opener.
 
 - Ketikan: `tl.fromTo(o,{i:0},{i:n, ease:'none', onUpdate: el.textContent =
   str.slice(0, Math.round(o.i))})` — BUKAN setInterval.
 - Uptime/counter: `f(t) = base + (t - tStart)`, format di render loop.
 - Sparkline/spektrum: jumlah sinus berbeda frekuensi atas `t` — murah,
   terlihat organik, dan reproducible.
+
+## 9b. Video sebagai layer footage
+
+Motion graphic tidak hanya gambar dan shape: klip video bisa menjadi layer seperti footage
+di After Effects — dipotong, diposisikan, di-mask, di-grade, dan dianimasikan bersama elemen
+lain. Semua starter sudah membawa helper `clip()`.
+
+**Kapan video lebih kuat daripada gambar**
+- Gerak nyata yang menjadi bukti: rekaman layar produk, orang memakai produk, proses yang
+  berjalan, suasana tempat.
+- Satu momen penekanan 3–8 dtk — bukan pengganti seluruh motion design. Teks, angka,
+  anotasi, dan transisi tetap dianimasikan di atas/sekitar klip.
+- Bila gambar diam cukup menjelaskan, pakai gambar (lebih ringan, ekspor lebih cepat).
+
+**Sumber klip** (ditanyakan ke user, sama seperti foto — `opener-konsep.md` "Foto dalam opener")
+- File dari user (prioritas): rekaman layar produk, B-roll brand, footage acara.
+- Generate lewat MCP Higgsfield bila disetujui — cek biaya dulu (klip video jauh lebih mahal
+  daripada gambar). Paling konsisten: generate gambar dengan gaya proyek, lalu image-to-video.
+- Stok berlisensi. Konteks faktual (berita, sejarah, data): klip hasil generate diberi label
+  "ilustrasi/rekonstruksi" — jangan disajikan sebagai rekaman asli; wajah orang nyata tidak
+  di-generate.
+
+**Format**
+- MP4 H.264 (`yuv420p`, `+faststart`) atau WebM VP9; tanpa suara (musik/VO tetap trek
+  terpisah); 720p–1080p; potong ke bagian yang dipakai supaya ringan.
+```bash
+ffmpeg -i sumber.mov -ss 2 -t 6 -vf "scale=1920:-2" -c:v libx264 -pix_fmt yuv420p -crf 20 -movflags +faststart -an assets/klip.mp4
+```
+- Deliverable menjadi `index.html` + folder `assets/` berisi klip; sebutkan itu ke user.
+
+**Pola pemakaian** (animasikan PEMBUNGKUS, bukan `<video>`-nya)
+- Di dalam perangkat: layar laptop/ponsel di opener SaaS; kamera menembus ke layar.
+- Di dalam wadah: kartu foto, bingkai membulat, lingkaran, huruf raksasa (`clip-path`/mask).
+- Belahan layar: video di satu sisi, klaim/angka di sisi lain.
+- Layar penuh dengan lapisan di atasnya: grade/tint palet (`filter` atau lapisan
+  `mix-blend-mode`), vignette, teks di kantong kontras (§1b).
+- Waktu: potong `in/out`, `rate` untuk slow/fast motion, `hold` untuk freeze frame akhir.
+- Transisi masuk/keluar sama seperti elemen lain (wipe benda, kartu membesar, match cut).
+
+**API helper** (ada di semua starter, setelah baris `window.OPENER=`)
+```html
+<div class="clipbox" id="box1"><video id="v1" src="assets/klip.mp4" muted playsinline preload="auto"></video></div>
+```
+```js
+clip($('#v1'), {at:4, in:1.5, out:6, rate:1, hold:false});  // at = detik timeline; in/out = potongan sumber
+tl.set('#box1', {autoAlpha:1}, 4);                             // tampilkan pembungkus saat klip mulai
+tl.fromTo('#box1', {scale:.8}, {scale:1, duration:1, ease:'power3.out', immediateRender:false}, 4);
+```
+- Isi video mengikuti jam timeline: saat diputar disinkronkan (koreksi bila selisih > 0,2 dtk),
+  saat scrub/pause di-seek tepat. Jangan pakai atribut `autoplay`/`loop` dan jangan
+  memanggil `play()` sendiri.
+- `OPENER.seekFrame(t)` men-seek timeline DAN menunggu frame klip siap; `snap.mjs` dan
+  `export-frames.mjs` memakainya otomatis, dan menunggu `OPENER.clipsReady()` sebelum mulai.
+- Sembunyikan pembungkus di luar rentang klip (`autoAlpha`) — di luar rentang, video dijeda.
+
+**Jaga-jaga**
+- Paling banyak 2–3 klip tampil bersamaan; klip besar yang tak terlihat tetap di-decode.
+- Ekspor MP4 lebih lambat karena tiap frame menunggu decoder video.
+- Selisih ±1 frame saat diputar real-time itu wajar; hasil ekspor tetap presisi frame.
+- Periksa hasil dengan `snap.mjs` di detik yang ada klipnya, bukan hanya di browser.
 
 ## 10. Jebakan
 

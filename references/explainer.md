@@ -1,11 +1,16 @@
 # Explainer — cerita bergambar, bukan promo
 
-Dua explainer nyata dibangun dengan skill ini pada September 2026 dan
-keduanya diterima tanpa revisi struktural:
+Untuk kartun edukasi flat berkarakter (gaya 6, **kartun panggung**: satu panggung
+per adegan, rig sendi, nol caption), baca [kartun-panggung.md](kartun-panggung.md).
+Jumlah kalimat tidak menentukan jumlah shot; lebih banyak gerak kamera juga
+bukan otomatis lebih menarik. Bagian resep kolase di bawah adalah opsi, bukan
+pola wajib bagi semua explainer.
+
+Dua gaya explainer yang paling sering dipakai:
 
 | | Kartun + VO | Jurnalisme visual (foto) |
 |---|---|---|
-| Contoh | "Kenapa dinosaurus punah" (76 dtk, 9:16) | "Dari SPBU Malang ke Selat Hormuz" (76 dtk, 9:16) |
+| Cocok untuk | sains/edukasi, ±75 dtk, 9:16 | berita/geopolitik, ±75 dtk, 9:16 |
 | Latar | kertas krem bertekstur + noda warna | hitam pekat + grain tipis |
 | Gambar | ilustrasi flat digenerate (GPT Image 2) lalu latar dihapus → cutout | foto asli berlisensi bebas (Wikimedia Commons, NASA, DVIDS) |
 | Teks | Bricolage Grotesque tebal + Caveat (tulisan tangan) | Barlow Condensed tebal + IBM Plex Mono (kicker) |
@@ -27,7 +32,7 @@ Lewati bagian yang sudah disebut user; bila ada video referensi, gaya
 diambil dari sana (ritmenya — lihat SKILL.md Hukum #3).
 
 **Gaya** (sertakan satu baris rekomendasi: sejarah → 4 atau 1; berita → 2;
-produk → 3; gerak/rute → 5; sains → 1):
+produk → 3; gerak/rute → 5; sains/edukasi berkarakter → 6; topik ringan → 1):
 
 | # | Gaya | Rasanya | Cocok untuk | Aset |
 |---|---|---|---|---|
@@ -36,6 +41,7 @@ produk → 3; gerak/rute → 5; sains → 1):
 | 3 | Katalog putih | putih bergrid, cutout foto, tipografi campur, coretan | produk, brand, profil perusahaan | foto produk/orang, latar dihapus |
 | 4 | Sketsa vintage | kertas sepia, ukiran/etsa, serif klasik, anotasi karat | sejarah, biografi, penemuan | ilustrasi gaya ukiran digenerate |
 | 5 | Aksi kontinu (vektor) | dunia mengalir, satu subjek, angka di dalam dunia, ganti sudut | kecepatan, rute, transportasi, olahraga, proses | 100 % SVG digambar, tanpa generate |
+| 6 | Kartun panggung | flat cerah, satu panggung per adegan, tokoh bersendi beraksi, mesin/air/tanaman hidup, tanpa caption | edukasi sains/sosial berkarakter, proses & dampak, cerita | tubuh & dunia vektor; kepala digenerate → ekspresi lokal |
 
 **Tiga hal lain dalam pertanyaan yang sama:**
 
@@ -48,9 +54,9 @@ produk → 3; gerak/rute → 5; sains → 1):
 Yang TIDAK ditanya: caption (default tanpa) dan player (default tanpa,
 autoplay + loop).
 
-**Pagar durasi (keras):** total ≤ 90 dtk kecuali diminta eksplisit; jumlah
-adegan ≈ durasi ÷ 6 (30 dtk = 5 adegan, 60 dtk = 10); tiap adegan 3–6 dtk
-tanpa VO (waktu baca) atau mengikuti kalimat VO. Materi berlebih dipotong,
+**Pagar durasi:** ikuti durasi brief dan VO; default tetap ringkas. Jumlah
+adegan ditentukan oleh konteks yang berubah. Beberapa kalimat dapat memakai
+satu dunia dengan aktivitas yang berkembang. Materi berlebih dipotong,
 bukan videonya dipanjangkan. Permintaan "10 menit" → konfirmasi, lalu pecah
 per bab ≤ 90 dtk dengan berkas terpisah.
 
@@ -128,10 +134,58 @@ yang sama, dan tulang inilah yang boleh dipakai ulang:
 4. **Angka besar** yang menghitung naik, lalu dibandingkan (bar sebelum/sesudah).
 5. **Linimasa** 2–3 tanggal, satu kalimat per tanggal.
 6. **Grafik** yang menggambar diri (garis harga, area di bawahnya).
-7. **Dampak ke penonton** ("terasa di nozzle SPBU").
+7. **Dampak ke penonton** ("terasa di dompet sehari-hari").
 8. **Penutup yang menggema ke hook** + daftar sumber kecil.
 
 Jangan ambil: palet, font, layout persis, maskot, kalimat. Ganti semuanya.
+
+## Satu adegan = 3–5 elemen yang menumpuk (bukan satu gambar)
+
+Kegagalan yang umum: tiap adegan hanya SATU cutout + satu kalimat. Walau kamera
+sudah bergerak, penonton tidak tahu "seperti apa" hal yang diceritakan — satu
+simbol tidak cukup menjelaskan. Explainer jurnalistik yang baik (±20 beat per
+30 dtk) memakai pola berikut:
+
+1. **Akresi per frasa.** Tiap frasa VO MENAMBAH satu elemen; elemen lama
+   tetap di tempat. Adegan selesai dengan 3–5 elemen (maksimal 5) yang
+   bersama-sama menjelaskan: subjek (foto/cutout) + bukti (dokumen, kliping,
+   layar) + skala (angka atau grid pengulangan) + label/stempel tanggal +
+   coretan. Contoh "pesan musuh tak terbaca" = kapal → kapal selam melintas →
+   radio penyadap → lembar telegram berisi sandi yang terus berganti + stempel
+   RAHASIA → kalimat.
+2. **Bukti, bukan hiasan.** Pilih elemen yang menjawab "seperti apa
+   bentuknya?": dokumen ketik dengan stempel (nama perkara · BERSALAH),
+   kliping koran dengan frasa disorot, kartu sumber (badge media + judul),
+   layar/mockup, blok tanggal. Dokumen dibangun di HTML (kertas putih +
+   border tipis + mono + stempel miring merah) — tidak perlu digenerate.
+3. **Pengulangan untuk skala.** Satu gambar diperbanyak jadi grid (foto anak sekolah
+   jadi puluhan; satu rotor mesin jadi 12 rotor)
+   dengan stagger `back.out` — lebih terasa daripada angka saja. Angka
+   tetap ada, tapi bukan satu-satunya.
+4. **Foto → dokumen.** Foto zoom out lalu ternyata ada di sampul majalah /
+   koran; blok tahun muncul di sebelahnya. Satu aset, dua makna.
+5. **Elemen yang bergerak sendiri** (deterministik dari `tl.time()`):
+   huruf sandi berganti lalu terurai jadi teks terbaca, jarum jam berlari ke
+   tengah malam, angka menghitung naik, palu hakim mengetuk.
+6. **Kamera tetap satu per adegan**: elemen menumpuk di area yang sama;
+   kamera `look` sedikit (±200 px, z 1–1,15) untuk menyambut elemen baru.
+   Elemen baru = look kecil, bukan cut.
+7. **Batas teks tidak berubah**: satu kalimat besar + satu label per adegan.
+   Dokumen/stempel/blok tanggal/catatan tangan dihitung OBJEK (dibaca sebagai
+   gambar) bukan tingkat teks — syaratnya isi ≤ 3 baris pendek.
+8. **Aset tambahan cepat**: properti fotoreal "studio product photo,
+   isolated on pure white" (Higgsfield `gpt_image_2_5`, tanpa wajah orang
+   nyata) ditumpuk `mix-blend-mode:multiply` — latar putihnya lenyap di atas
+   grid tanpa hapus latar. Jangan beri `drop-shadow` pada elemen multiply
+   (bayangannya jadi persegi); bayangan sudah ada di fotonya. Foto arsip
+   berlatar rumit tetap lewat `image_background_remover` (butuh `prompt`),
+   lalu pangkas margin transparan (bbox alpha) supaya ukuran CSS = isi.
+9. Kalau `remove_background` menghapus subjeknya (kapal hilang, tersisa
+   haluan kapal lain), jangan dipaksa — generate properti pengganti.
+
+Helper di `assets/starter-explainer-katalog.html`: `slam` (stempel
+dihentak), `block` (blok tanggal disingkap dari kiri), `multiply` (grid
+beruntun); CSS `.doc`, `.stampblk`, `.pnote`, `.grid`, `.cut.card`.
 
 ## Resep teknis
 
@@ -209,12 +263,15 @@ autoplay. Durasi adegan ikut durasi klip (ukur dulu dengan ffprobe).
   domain publik. Jangan pakai screenshot berita/TV.
 - Kalau foto lokasi persis tidak ada, pakai foto sejenis dan beri label
   "ilustrasi" — jangan berpura-pura.
+- **Video pelengkap**: klip 3–8 dtk sebagai layer footage (`techniques.md` §9b) — dari user,
+  stok berlisensi, atau generate lewat MCP bila disetujui (label "ilustrasi/rekonstruksi" pada
+  topik faktual). Klip tetap dibungkus desain adegan: kartu, bingkai, anotasi, angka.
 
 ## Entitas yang disebut WAJIB tampil (aturan krusial)
 
-Ditegur user pada revisi explainer Indomie: "PT Sanmaru" tanpa foto
-perusahaannya, "diracik Nunuk Nuraini" tanpa wajahnya, "17 pabrik" tanpa
-pabriknya, produk disebut tanpa kemasannya — semuanya ditolak. Prosedur:
+Kegagalan yang umum: nama perusahaan disebut tanpa foto perusahaannya, nama
+penemu disebut tanpa wajahnya, "17 pabrik" tanpa pabriknya, produk disebut
+tanpa kemasannya — penonton tidak bisa mengaitkan kata dengan gambar. Prosedur:
 
 1. Dari naskah, tulis **daftar entitas**: orang, perusahaan, gedung/kota,
    produk/varian, peristiwa. Tiap entitas = satu gambar di adegannya.
@@ -229,8 +286,8 @@ pabriknya, produk disebut tanpa kemasannya — semuanya ditolak. Prosedur:
 
 ## Keterbacaan di ponsel (aturan keras)
 
-Ditegur user: keterangan ilustrasi 22 px dan sub-label nama 26 px "hampir
-tidak bisa dibaca, apalagi di HP". Video 9:16 ditonton di layar ±6 inci,
+Keterangan ilustrasi 22 px dan sub-label nama 26 px hampir tidak bisa dibaca,
+apalagi di ponsel. Video 9:16 ditonton di layar ±6 inci,
 dan safe-area scale 0,78 memperkecil semuanya lagi. Ukuran MINIMUM pada
 panggung 1080 px (sebelum safe-scale):
 
@@ -248,10 +305,10 @@ atau buang — bukan dikecilkan.
 
 ## Variasi, bukan pola tetap
 
-Dua kebiasaan yang dikoreksi user karena terasa "itu-itu saja":
+Dua kebiasaan yang membuat video terasa "itu-itu saja":
 
 - **Teks hantu / angka tahun besar**: pilih SATU gaya untuk satu video
-  (koreksi user: outline di satu adegan dan isi di adegan lain terasa tidak
+  (outline di satu adegan dan isi di adegan lain terasa tidak
   konsisten) — dan pastikan terlihat: isi transparan ≥ .18–.25, jangan
   .08–.12 karena menyatu dengan latar. Gaya lain (outline, blur, terpotong
   tepi) dipakai di video lain, bukan dicampur dalam satu video.
@@ -261,16 +318,21 @@ Dua kebiasaan yang dikoreksi user karena terasa "itu-itu saja":
 
 ## Aset harus terasa hidup
 
-Koreksi user: ayunan cutout ±10 px selama 2 dtk "terlihat statis". Minimum:
+Ayunan cutout ±10 px selama 2 dtk terlihat statis. Minimum:
 ayunan ±22–28 px dengan durasi 1,3–1,8 dtk (`sine.inOut`, yoyo), ditambah
 putaran kecil ±1,5° dan pertumbuhan skala 1→1,06 pelan sepanjang adegan,
 serta geser x beberapa belas px. Beri fase/durasi berbeda per objek supaya
 tidak serempak. Untuk objek besar (kapal, kota) tambahkan gerak arah
 (berlayar, dorong kamera) dengan `ease:'none'`.
 
-## Kamera explainer: close-up → meluncur → zoom out (bukan cuma in/out)
+## Resep kamera kolase: close-up → meluncur → zoom out
 
-Dua koreksi user berturut-turut membentuk resep ini: (a) animasi yang hanya
+Prinsip umum ukuran shot untuk semua jenis video ada di `techniques.md` §3b.
+Ini satu resep untuk kolase berteks. Untuk animasi karakter/proses, kamera dapat
+menetap, mengikuti subjek, atau menyusuri sistem setelah reveal awal. Jangan
+memaksakan resep ini pada setiap segmen; gunakan kebutuhan narasi sebagai alasan.
+
+Resep ini menjawab tiga kegagalan umum: (a) animasi yang hanya
 "elemen masuk, elemen keluar" terasa PPT; (b) setelah kamera zoom out lalu
 mendorong lagi ke catatan, "info lain terpotong"; dan potongan langsung dari
 lebar ke close-up "terkesan tiba-tiba karena latar tiba-tiba zoom in".
@@ -290,7 +352,7 @@ lebar ke close-up "terkesan tiba-tiba karena latar tiba-tiba zoom in".
   mengendap (`power3.out`). Latar yang kontinu membuat potongan tak terasa.
   Aset pertama harus sudah masuk ≤ 0,1 dtk setelah cut supaya close-up tidak
   kosong.
-- **Urutan wajib: zoom out SELESAI dulu, baru teks muncul.** Koreksi user:
+- **Urutan wajib: zoom out SELESAI dulu, baru teks muncul.** Alasannya:
   teks yang lahir bersamaan (atau lebih dulu) dengan zoom out "terasa
   terpotong". Judul, body, label tahun, catatan tangan — semuanya
   dijadwalkan ≥ 0,1 dtk setelah `home()` selesai. Zoom out dibuat singkat
@@ -309,18 +371,17 @@ lebar ke close-up "terkesan tiba-tiba karena latar tiba-tiba zoom in".
   1080×1920 supaya tidak tertutup caption/navigasi. Grid/latar tetap penuh.
 - **Tanpa kontrol**: tidak ada overlay Play maupun slider. R = replay,
   spasi = pause. `?clean=1` tetap ada untuk render.
-- **Suara harus langsung menyala.** Browser memblokir audio autoplay tanpa
+- **Suara harus terdengar sejak awal.** Browser memblokir audio autoplay tanpa
   gestur (juga di `file://`), dan user menganggap "suara tidak muncul"
-  sebagai bug. Tiga lapis:
-  1. Sertakan **`buka.cmd`** di folder proyek: menjalankan Chrome/Edge
-     dengan `--autoplay-policy=no-user-gesture-required` ke `index.html`
-     → suara langsung jalan. Sebut di README sebagai cara membuka utama.
-  2. Di halaman: coba `vo.play()`; bila berhasil → play dari 0 bersuara.
-  3. Bila ditolak: **JANGAN mulai tanpa suara** — tahan di frame awal dengan
+  sebagai bug. Dua lapis:
+  1. Di halaman: coba `vo.play()`; bila berhasil → play dari 0 bersuara.
+  2. Bila ditolak: **JANGAN mulai tanpa suara** — tahan di frame awal dengan
      petunjuk kecil "ketuk / tekan tombol apa pun", lalu gestur pertama
-     memulai video + suara bersamaan dari 0. (Versi lama yang memutar
-     visual dulu lalu restart saat diketuk terasa seperti suara hilang.)
-  Trik play-muted-lalu-unmute tidak bekerja: unmute tanpa gestur tetap
+     memulai video + suara bersamaan dari 0. (Memutar visual dulu lalu
+     restart saat diketuk terasa seperti suara hilang.)
+  Jangan membuat file peluncur (`.cmd`, `.bat`, skrip shell) untuk memaksa
+  autoplay — deliverable cukup `index.html` (+ `assets/`). Trik
+  play-muted-lalu-unmute juga tidak bekerja: unmute tanpa gestur tetap
   diblokir.
 
 ## Fakta
@@ -345,8 +406,8 @@ tidak ditampilkan — tulis klaim kualitatifnya saja.
 
 Ciri gaya: latar putih bergrid tipis, cutout produk, objek terbang melewati
 lensa, lingkaran putus-putus, tipografi script + sans tebal miring.
-Diterapkan pada "Kenapa Indomie mendunia" (58 dtk, 9:16, tanpa VO), dengan
-warna dan foto asli — bukan hitam-putih, bukan kartun.
+Cocok untuk explainer produk atau merek (±60 dtk, 9:16, tanpa VO) dengan warna
+dan foto asli — bukan hitam-putih, bukan kartun.
 
 - Latar `#fff` + grid 120 px `rgba(0,0,0,.07)` yang dipudarkan ke tepi (mask
   radial). Tanpa grain, tanpa vignette — bersih.
@@ -367,6 +428,18 @@ warna dan foto asli — bukan hitam-putih, bukan kartun.
 - Peta dunia SVG opacity ~.16 + titik merah + garis putus rute.
 - Jebakan: cutout tinggi (foto potret) mudah menabrak body copy — hitung
   tinggi dari rasio foto; taruh body copy DI ATAS peta/objek bila perlu.
+- **Elemen bukti** (explainer tokoh sejarah ±50 dtk, 9:16, VO): kartu foto
+  (`.cut.card`: foto arsip berbingkai putih 16 px, grayscale ringan),
+  dokumen ketik (`.doc`: judul Inter spasi lebar + Plex Mono + stempel
+  `.stamp` merah/hijau yang dihentak `slam`), blok tanggal (`.stampblk`
+  hitam/kuning disingkap `block`), catatan tangan (`.pnote` Caveat di
+  kertas krem), grid pengulangan (`.grid` + `multiply`), jam SVG dengan
+  jarum yang di-tween `rotation` + `svgOrigin`. Lihat bagian "Satu adegan =
+  3–5 elemen".
+- 9:16: W=1080, H=1920, bungkus `#world` dalam `.safe` (scale .78);
+  area adegan 1080×1920 disusun di dunia (jarak 1600 px mendatar, 2400–3000
+  px menurun agar sisa cutout adegan sebelumnya tidak ikut terlihat), kertas
+  grid dibuat 14000×12500 px supaya semua area tertutup.
 
 
 ## Gaya keempat: "buku sketsa vintage" (ukiran sepia di kertas tua)
@@ -394,7 +467,7 @@ Dipakai untuk explainer sejarah (mesin uap, 64 dtk, 9:16, tanpa suara).
 ## Gaya kelima: "aksi kontinu" — satu subjek yang tidak pernah berhenti
 
 Obat untuk explainer yang "terasa slide PPT" walau kameranya sudah
-berkoreografi. Dipelajari dari explainer olahraga kecepatan tinggi (ilustrasi
+berkoreografi. Contoh polanya: explainer olahraga kecepatan tinggi (ilustrasi
 flat, 16:9): semua fakta disampaikan TANPA menghentikan aksinya. Bisa 100 %
 vektor SVG yang digambar prosedural di JS (tanpa gambar generate) — justru
 itu yang memberi rasa motion graphic After Effects.
@@ -462,8 +535,8 @@ Resep teknis (HTML + GSAP):
 - Ukuran teks tetap mengikuti aturan "Keterbacaan di ponsel".
 
 **Sudut pandang WAJIB berganti.** "Subjek dari samping + teks" dari awal
-sampai akhir ditegur "static / monoton" walau latar mengalir dan kamera
-bergerak (5 Sep 2026). Aturan: tidak ada tiga adegan berturut-turut dengan
+sampai akhir terasa statis dan monoton walau latar mengalir dan kamera
+bergerak. Aturan: tidak ada tiga adegan berturut-turut dengan
 sudut yang sama, dan tiap fakta baru idealnya dapat "instrumen" sendiri.
 Katalog sudut yang sudah terbukti (semua vektor, semua dari rig yang sama):
 
@@ -493,7 +566,7 @@ melewati fraksi panjangnya; kamera peta mulai zoom 2–2,5× di titik awal,
 mengikuti penanda, lalu melonggar ke seluruh rute (`translate(pusat)
 scale(z) translate(-cx -cy)` dihitung dari progres). Angka total (jarak,
 waktu) muncul setelah zoom out. Tanpa ini, "subjek + teks" dari awal
-sampai akhir tetap terasa statis walau latar mengalir (ditegur 5 Sep 2026).
+sampai akhir tetap terasa statis walau latar mengalir.
 
 Kamera samping juga harus "bernapas": rangkaian keyframe
 `[t, zoom, cx, cy]` (dorong masuk 1,06–1,12× pada momen penting: angka

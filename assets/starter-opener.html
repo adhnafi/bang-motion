@@ -3,14 +3,19 @@
 <!-- Made with the Bang Motion skill v1.0.0 by Bang Tutorial (https://youtube.com/bangtutorial) - MIT - https://github.com/bangtutorial/bang-motion -->
 <head>
 <meta charset="utf-8">
-<title>Bang Motion — Starter</title>
+<title>Bang Motion — Starter Opener</title>
 <!--
-  STARTER OPENER / PROMO / BUMPER / TYPOGRAPHY — satu berkas.
-  Ini ARSITEKTUR, bukan gaya: stage 1920x1080, rig kamera #world, scene Three.js
-  ber-state, helper timeline, autoplay + loop tanpa player (?debug=1 = panel).
+  STARTER OPENER / PROMO / BUMPER / INTRO / TYPOGRAPHY — satu berkas (kategori: opener).
+  Ini ARSITEKTUR + PERKAKAS, bukan gaya dan bukan kerangka: stage 1920x1080, rig kamera
+  #world, scene Three.js ber-state, 8 pintu teks, transisi opsional, autoplay + loop tanpa
+  player (?debug=1 = panel scrub, ?demo=1 = peraga pintu teks).
+  SENGAJA TANPA URUTAN ADEGAN CONTOH. Kerangka (konsep, jumlah adegan, objek utama,
+  pembuka, penutup) lahir dari references/opener-konsep.md — bukan dari file ini.
 
   =====  STYLE BRIEF — isi dulu, baru sentuh kode (SKILL.md Hukum #3)  =====
   Tema/produk + 3 kata sifat : ____________________
+  Konsep (opener-konsep.md)   : kandidat 1 ______ / 2 ______ / 3 ______  -> dipilih: ______
+  Sidik jari struktur         : konsep · n adegan · objek tiap adegan · pembuka · penutup
   Palet (dari brand)          : utama #______  latar #______  aksen #______
   Font display / pendamping   : ____________  / ____________   (bukan Poppins/Inter/Roboto/Montserrat)
   Bahasa latar (1 arah)       : sinematik gelap | poster color-block | editorial terang | kertas & cetak |
@@ -72,8 +77,8 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;
 
 .hero-wrap{perspective:1400px}
 .hero.sm{font-size:74px}.hero.md{font-size:92px}.hero.lg{font-size:128px}.hero.xl{font-size:150px;font-weight:600}
-.txt2{display:inline-block;opacity:0}                      /* tanda baca: pop terpisah, ketukan kalimat */
-/* kata sorotan: .hl + SATU varian bentuk (pilih di style brief): pill | under | marker | box | color. Ornamen tidak default. */
+.txt2{display:inline-block;opacity:0}                      /* tanda baca OPSIONAL: hanya bila kalimat memang bertanda baca */
+/* kata sorotan OPSIONAL (style brief boleh memilih tanpa sorotan): .hl + SATU varian bentuk: pill | under | marker | box | color. Ornamen tidak default. */
 .hl{position:relative;display:inline-block}
 .hl i{position:absolute;transform:scaleX(0);transform-origin:0 50%}
 .hl-t{position:relative;opacity:0}
@@ -96,7 +101,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;
   background:radial-gradient(60% 46% at 50% 50%,rgba(0,0,0,.55),transparent 72%)}   /* kantong gelap di bawah teks */
 .hero{font-size:142px;font-weight:500;letter-spacing:-.01em;color:#fff;
   white-space:nowrap;text-shadow:0 4px 30px rgba(0,0,0,.5)}  /* TANPA glow */
-#line-a,#line-b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+#line-a{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .wd{display:inline-block;white-space:nowrap}
 .ch{display:inline-block;will-change:transform,opacity,filter;opacity:0} /* awal 0: cegah flash sebelum tween */
 
@@ -136,13 +141,15 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;
     <div id="dom">
       <div class="paper" id="paper"><i class="b b1"></i><i class="b b2"></i><i class="b b3"></i></div>
       <div class="pocket" id="pocket"></div>
+      <!-- Adegan, jumlahnya, dan urutannya ditulis dari rundown KONSEP (references/opener-konsep.md).
+           Adegan tidak harus "kalimat + objek": boleh aksi produk tanpa teks, tipografi murni,
+           atau beberapa objek yang saling bereaksi. Elemen di bawah hanya PLACEHOLDER untuk ?demo=1. -->
       <section class="scene" id="sc-a"><div class="hero-wrap">
-        <!-- hanya .txt yang di-split per huruf; sorotan (.hl) dan tanda baca (.txt2) punya tween sendiri.
-             Ganti varian sorotan (pill/under/marker/box/color) sesuai style brief; jangan tambah ornamen tanpa alasan brand. -->
-        <h1 class="hero md" id="line-a"><span class="txt">Kalimat pertama yang</span>&nbsp;<span class="hl under" id="hl-a"><i></i><span class="hl-t">hidup</span></span><span class="txt2">.</span></h1>
-        <h1 class="hero lg ink" id="line-b"><span class="txt">Kalimat kedua.</span></h1>
+        <!-- hanya .txt yang di-split per huruf; sorotan (.hl) dan tanda baca (.txt2, opsional) punya tween sendiri.
+             Sorotan (.hl) OPSIONAL: hapus span-nya bila style brief memilih tanpa sorotan. Bila dipakai, varian
+             (pill/under/marker/box/color) dari style brief, tidak wajib di setiap kalimat; ornamen hanya dari bentuk brand. -->
+        <h1 class="hero md" id="line-a"><span class="txt">Pintu teks dipilih dari arti</span>&nbsp;<span class="hl under" id="hl-a"><i></i><span class="hl-t">kalimat</span></span></h1>
       </div></section>
-      <!-- tambah adegan di sini: satu kalimat + maks satu objek per adegan -->
     </div>
   </div>
   <div class="leak" id="leak"></div>
@@ -288,68 +295,93 @@ function render(t){ // t = tl.time(); TIDAK ADA jam lain di file ini
 }
 
 /* ============ TIMELINE — satu-satunya tempat waktu ditulis ============ */
-const DURATION=8.0;
+const Q=new URLSearchParams(location.search);
+const DURATION=8.0;                       // GANTI: dari rundown konsep
 const tl=gsap.timeline({paused:true});
 const rig=$('#world'), leak=$('#leak');
 
+/* ---- TRANSISI OPSIONAL (menu techniques.md §4c). SENGAJA tidak dipanggil di starter.
+   Push-through dan light leak termasuk komponen kanonik: pakai hanya bila konsep menuntut,
+   paling banyak dua komponen kanonik per opener (opener-konsep.md). ---- */
 let leakSide=1;
 const sweep=(at,dur=1.0)=>{ const side=(leakSide*=-1);   // light leak bergantian sisi
   tl.fromTo(leak,{x:side*1500,y:-240,scale:.85},
     {x:side*330,y:130,scale:1.12,duration:dur,ease:'sine.out',immediateRender:false},at);
   tl.fromTo(leak,{opacity:0},{opacity:.85,duration:dur*.4,ease:'sine.in',immediateRender:false},at);
   tl.to(leak,{opacity:0,duration:dur*.6,ease:'sine.out'},at+dur*.4); };
-
-/* push-through: dorong masuk ke teks lama, cut, tarik mundur dari teks baru.
-   Lompatan scale di titik cut tak terlihat — frame sedang kosong/tertutup leak. */
+/* push-through: dorong masuk ke subjek lama, cut, tarik mundur dari subjek baru (jatah ±1, termotivasi) */
 const camThrough=(atCut,{push=2,from=1.5,inDur=.5,outDur=.95,
                          oOut='50% 50%',oIn='50% 50%'}={})=>{
   tl.set(rig,{transformOrigin:oOut},atCut-inDur);
   tl.to(rig,{scale:push,duration:inDur,ease:'power2.in'},atCut-inDur);
   tl.set(rig,{transformOrigin:oIn,scale:from},atCut);
   tl.to(rig,{scale:1,duration:outDur,ease:'power3.out'},atCut); };
+/* kamera bernapas: fondasi gerak yang boleh selalu ada (techniques.md §4b); arah bergantian per rentang */
+const breathe=(from,to,{z0=1,z1=1.045,origin='50% 50%'}={})=>{
+  tl.set(rig,{transformOrigin:origin},from);
+  tl.fromTo(rig,{scale:z0},{scale:z1,duration:to-from,ease:'sine.inOut',immediateRender:false},from); };
+/* ganti latar di balik transisi (techniques.md §7b) — panggil hanya bila style brief memutuskan segmen berganti mood */
+const gantiLatarTerang=at=>{
+  tl.set('#paper',{autoAlpha:1},at); tl.to('#gl',{opacity:0,duration:.25},at);
+  tl.to('.vignette',{opacity:.35,duration:.4},at); tl.to('.bgfx',{opacity:0,duration:.25},at);
+  tl.to('#pocket',{opacity:0,duration:.3},at-.1);
+  tl.to('.paper .b',{x:60,y:-40,duration:3,ease:'sine.inOut',yoyo:true,repeat:1,stagger:.4},at); };
 
-/* ---- tipografi hidup (techniques.md §1): empat pintu + pill sorotan + tanda baca ---- */
-const inUp  =(ch,el,at,{dur=.8,st=.024}={})=>{tl.fromTo(ch,{opacity:0,yPercent:60,scaleY:1.45},{opacity:1,yPercent:0,scaleY:1,duration:dur,ease:'power4.out',stagger:st,immediateRender:false},at);blurTween(tl,el,at,30,0,dur,VERT);};
-const inLeft=(ch,el,at,{dur=.75,st=.02}={})=>{tl.fromTo(ch,{opacity:0,xPercent:-45},{opacity:1,xPercent:0,duration:dur,ease:'power4.out',stagger:st,immediateRender:false},at);blurTween(tl,el,at,50,0,dur,{ease:'power4.out'});};
-const outUp =(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,yPercent:-70,duration:dur,ease:'power2.in',stagger:st},at);blurTween(tl,el,at,0,45,dur+.1,{ease:'power2.in',...VERT});};
-const outLeft=(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,xPercent:-60,duration:dur,ease:'power2.in',stagger:st},at);blurTween(tl,el,at,0,55,dur+.1,{ease:'power2.in'});};
+/* ---- 8 PINTU TEKS (techniques.md §1). Tidak ada pintu default: pilih dari ARTI kalimat,
+   dua adegan berturut-turut tidak memakai pintu yang sama. ch = hasil splitChars, el = elemen kalimat. ---- */
+const inUp   =(ch,el,at,{dur=.8,st=.024}={})=>{tl.fromTo(ch,{opacity:0,yPercent:60,scaleY:1.45},{opacity:1,yPercent:0,scaleY:1,duration:dur,ease:'power4.out',stagger:st,immediateRender:false},at);blurTween(tl,el,at,30,0,dur,VERT);};
+const inDown =(ch,el,at,{dur=.8,st=.024}={})=>{tl.fromTo(ch,{opacity:0,yPercent:-60,scaleY:1.45},{opacity:1,yPercent:0,scaleY:1,duration:dur,ease:'power4.out',stagger:st,immediateRender:false},at);blurTween(tl,el,at,30,0,dur,VERT);};
+const inLeft =(ch,el,at,{dur=.75,st=.02}={})=>{tl.fromTo(ch,{opacity:0,xPercent:-45},{opacity:1,xPercent:0,duration:dur,ease:'power4.out',stagger:st,immediateRender:false},at);blurTween(tl,el,at,50,0,dur,{ease:'power4.out'});};
+const inRight=(ch,el,at,{dur=.75,st=.02}={})=>{tl.fromTo(ch,{opacity:0,xPercent:45},{opacity:1,xPercent:0,duration:dur,ease:'power4.out',stagger:{each:st,from:'end'},immediateRender:false},at);blurTween(tl,el,at,50,0,dur,{ease:'power4.out'});};
+const inDepth=(ch,el,at,{dur=1,st=.018}={})=>{tl.fromTo(ch,{opacity:0,scale:2.4},{opacity:1,scale:1,duration:dur,ease:'expo.out',stagger:{each:st,from:'center'},immediateRender:false},at);blurTween(tl,el,at,22,0,dur,{ease:'expo.out',ax:1,ay:1});};
+const inMask =(ch,el,at,{dur=.9,from='left'}={})=>{const c={left:'inset(0% 100% 0% 0%)',right:'inset(0% 0% 0% 100%)',up:'inset(100% 0% 0% 0%)',down:'inset(0% 0% 100% 0%)'}[from];
+  tl.set(ch,{opacity:1,xPercent:0,yPercent:0,scale:1,scaleY:1},at);
+  tl.fromTo(el,{clipPath:c},{clipPath:'inset(0% 0% 0% 0%)',duration:dur,ease:'power3.inOut',immediateRender:false},at);
+  tl.set(el,{clipPath:'none'},at+dur);};
+const inWords=(ch,el,at,{dur=.6,st=.14}={})=>{const w=el.querySelectorAll('.wd');
+  tl.set(ch,{opacity:1,xPercent:0,yPercent:0,scale:1,scaleY:1},at);
+  tl.fromTo(w,{opacity:0,yPercent:40,rotateX:-55},{opacity:1,yPercent:0,rotateX:0,duration:dur,ease:'back.out(1.6)',stagger:st,immediateRender:false},at);};
+/* ketikan: untuk elemen teks BIASA (tidak di-split) yang memang diketik di dunia konsep — bukan kotak input default */
+const typeOn =(el,at,{cps=18}={})=>{const str=el.dataset.full||(el.dataset.full=el.textContent);const o={i:0};
+  tl.set(el,{autoAlpha:1},at);
+  tl.fromTo(o,{i:0},{i:str.length,duration:str.length/cps,ease:'none',immediateRender:false,
+    onUpdate(){el.textContent=str.slice(0,Math.round(o.i));}},at);};
+const outUp   =(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,yPercent:-70,duration:dur,ease:'power2.in',stagger:st},at);blurTween(tl,el,at,0,45,dur+.1,{ease:'power2.in',...VERT});};
+const outDown =(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,yPercent:70,duration:dur,ease:'power2.in',stagger:st},at);blurTween(tl,el,at,0,45,dur+.1,{ease:'power2.in',...VERT});};
+const outLeft =(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,xPercent:-60,duration:dur,ease:'power2.in',stagger:st},at);blurTween(tl,el,at,0,55,dur+.1,{ease:'power2.in'});};
+const outRight=(ch,el,at,{dur=.4,st=.01}={})=>{tl.to(ch,{opacity:0,xPercent:60,duration:dur,ease:'power2.in',stagger:{each:st,from:'end'}},at);blurTween(tl,el,at,0,55,dur+.1,{ease:'power2.in'});};
+const outDepth=(ch,el,at,{dur=.5,st=.008}={})=>{tl.to(ch,{opacity:0,scale:2.6,duration:dur,ease:'power2.in',stagger:{each:st,from:'center'}},at);blurTween(tl,el,at,0,30,dur+.1,{ease:'power2.in',ax:1,ay:1});};
 const mark=(hl,at)=>{const i=$('i',hl);if(i)tl.fromTo(i,{scaleX:0},{scaleX:1,duration:.5,ease:'power3.out',immediateRender:false},at);   // bidang/garis sorotan, varian apa pun
   tl.fromTo($('.hl-t',hl),{opacity:0,yPercent:60},{opacity:1,yPercent:0,duration:.7,ease:'power4.out',immediateRender:false},at);
   const orn=$('.hl-orn',hl);if(orn)tl.fromTo(orn,{opacity:0,scale:.2,rotate:-40},{opacity:1,scale:1,rotate:0,duration:.5,ease:'back.out(2)',immediateRender:false},at+.22);};
 const popDot=(el,at)=>tl.fromTo(el,{opacity:0,yPercent:60},{opacity:1,yPercent:0,duration:.5,ease:'power4.out',immediateRender:false},at);
 
-/* ---- ADEGAN CONTOH: dua kalimat, satu cut; arah masuk & ukuran BERBEDA tiap adegan ---- */
-const scA=$('#sc-a'), la=$('#line-a'), lb=$('#line-b');
-const aCh=splitChars($('.txt',la)), bCh=splitChars($('.txt',lb));
-
-tl.set(S,{grid:0,dust:.15,stars:0,heroO:0,heroS:.16,camZ:30,camRoll:.3,bloom:1.1},0);
-tl.to(S,{heroO:1,heroS:1,duration:1.05,ease:'back.out(1.7)'},.25);   // ornamen mekar
-tl.to(S,{stars:.85,dust:.6,grid:.25,camZ:13.2,camRoll:0,bloom:.85,
-         duration:2.6,ease:'power2.inOut'},.3);
-
-tl.set(scA,{autoAlpha:1},1.4);
-tl.fromTo(rig,{scale:1.6},{scale:1,duration:1.2,ease:'power3.out',immediateRender:false},1.5);
-tl.set(la,{autoAlpha:1},1.5);
-tl.to('#pocket',{opacity:1,duration:.6},1.3);                        // kantong gelap menyala bersama teks
-inUp(aCh,la,1.55); mark($('#hl-a'),2.15); popDot($('.txt2',la),2.45);
-tl.to(S,{heroX:-5.6,heroY:-2.2,heroS:.62,duration:1,ease:'power3.inOut'},1.4);
-
-outLeft(aCh,la,3.6); tl.to(['#hl-a','.txt2'],{opacity:0,x:-60,duration:.4,ease:'power2.in'},3.6);
-tl.set(la,{autoAlpha:0},4.2);
-sweep(3.7,.9); camThrough(4.0,{push:1.9,from:1.45});
-/* CONTOH ganti latar di balik cut: gelap → terang (techniques.md §7b). Kertas hanya contoh — bisa gradien terang,
-   warna lembut, blok warna. Ganti latar hanya bila segmennya berganti mood/topik; putuskan di style brief. Di t=0 dikembalikan untuk loop. */
+/* ---- LATAR: keadaan awal dunia. PLACEHOLDER — turunkan dari style brief, matikan WebGL bila arahnya lain. ---- */
 tl.set('#paper',{autoAlpha:0},0); tl.set(['#gl','.vignette','.bgfx'],{opacity:1},0);
-tl.set('#paper',{autoAlpha:1},4.0); tl.to('#gl',{opacity:0,duration:.25},4.0);
-tl.to('.vignette',{opacity:.35,duration:.4},4.0); tl.to('.bgfx',{opacity:0,duration:.25},4.0);
-tl.to('#pocket',{opacity:0,duration:.3},3.9);
-tl.to('.paper .b',{x:60,y:-40,duration:3,ease:'sine.inOut',yoyo:true,repeat:1,stagger:.4},4.0);
+tl.set(S,{grid:.25,dust:.6,stars:.85,heroO:0,camZ:13.2,camRoll:0,bloom:.85},0);
+breathe(0,DURATION);
 
-tl.set(lb,{autoAlpha:1},3.98);
-inLeft(bCh,lb,4.05);
+/* ================= RUNDOWN — tulis adegan dari KONSEP di sini =================
+   Tidak ada adegan contoh supaya tidak ada kerangka yang bisa ditiru. Bentuk panggilannya:
+     const chN = splitChars($('.txt', elN));
+     tl.set(elN, {autoAlpha:1}, T);  <pintu>(chN, elN, T);
+     popDot(dotN, T+.75) HANYA bila kalimat memang bertanda baca — judul/klaim default tanpa titik.
+     mark(hlN, T+.5) HANYA bila style brief memakai sorotan kata — tidak wajib, tidak di setiap kalimat.
+     Tanpa sorotan, penekanan dari inWords / ukuran / redup → penuh / objek di samping kata.
+   Pembuka, cara menyajikan fitur, penutup: pilih dari menu opener-konsep.md.
+   ============================================================================== */
 
-outUp(bCh,lb,6.6);
-tl.to(S,{heroO:0,duration:.4},6.8);
+/* ---- PERAGA ?demo=1 — katalog pintu teks satu per satu. Ini daftar PERKAKAS, bukan urutan adegan. ---- */
+if(Q.has('demo')){
+  const scA=$('#sc-a'), la=$('#line-a'), ch=splitChars($('.txt',la));
+  tl.set([scA,la],{autoAlpha:1},0);
+  let t=.3;
+  for(const [pin,pout] of [[inUp,outUp],[inDown,outDown],[inLeft,outLeft],[inRight,outRight],[inDepth,outDepth]]){
+    pin(ch,la,t); pout(ch,la,t+1.15); t+=1.7; }
+  inMask(ch,la,t); outDepth(ch,la,t+1.2); t+=1.8;
+  inWords(ch,la,t); outUp(ch,la,t+1.3); t+=1.9;
+  tl.to({},{duration:.01},t);
+}
 tl.to({},{duration:.01},DURATION);
 
 /* ============ PEREKAT ============ */
@@ -376,7 +408,6 @@ scrub.addEventListener('input',()=>{tl.pause();tl.time(scrub.value/1000*DURATION
 addEventListener('keydown',e=>{ if(e.code==='Space'){e.preventDefault();toggle();}
   if(/^[rR]$/.test(e.key)){tl.pause(0);tl.play();}
   if(/^[hH]$/.test(e.key))$('#ui').classList.toggle('on'); });
-const Q=new URLSearchParams(location.search);
 if(Q.has('debug'))$('#ui').classList.add('on');            // default: TANPA player
 tl.eventCallback('onComplete',()=>{tl.play(0);});           // default: loop
 
@@ -384,6 +415,37 @@ tl.eventCallback('onComplete',()=>{tl.play(0);});           // default: loop
 /* seek sinkron: paksa GSAP menulis gaya + gambar kanvas sekarang (rAF bisa dithrottle) */
 const seek=t=>{tl.pause();tl.time(t,false);if(gsap.ticker.tick)gsap.ticker.tick();render(t);};
 window.OPENER={tl,DURATION,seek,ready:false};   // dipakai konsol & skrip export
+/* ================= FOOTAGE — layer video yang terikat timeline (seperti footage di After Effects) =================
+   Markup : <div class="clipbox"><video class="clip" src="assets/klip.mp4" muted playsinline preload="auto"></video></div>
+   Pasang : const k = clip($('#v1'), {at:4, in:1.5, out:6, rate:1, hold:false});
+            at = detik timeline klip mulai · in/out = potongan sumber (dtk) · rate = kecepatan · hold = tahan frame akhir
+   Animasi: tween PEMBUNGKUSNYA dengan tl (posisi, skala, mask, opacity, filter). Isi video mengikuti jam timeline,
+            bukan jamnya sendiri — scrub ?debug=1, snap.mjs, dan export-frames.mjs (OPENER.seekFrame) tetap presisi.
+   Format : MP4 H.264 (yuv420p, +faststart) atau WebM VP9, tanpa suara, 720p–1080p, 3–8 dtk per klip. */
+var CLIPS = CLIPS || [];
+function clip(el, o){ o = o || {}; el.muted = true; el.playsInline = true; el.preload = 'auto'; el.loop = false;
+  try { el.pause(); } catch(e) {}
+  var c = { el: el, at: o.at || 0, inT: o.in || 0, out: (o.out == null ? null : o.out), rate: o.rate || 1, hold: !!o.hold };
+  (CLIPS = CLIPS || []).push(c); return c; }
+function clipTime(c, t){ var end = c.out != null ? c.out : (isFinite(c.el.duration) ? c.el.duration : 1e9);
+  var lt = (t - c.at) * c.rate; if (lt < 0) return null; var vt = c.inT + lt;
+  if (vt > end - 1/120) { if (!c.hold) return null; vt = end - 1/60; } return vt; }
+function syncClips(t, playing){ for (var i = 0; i < CLIPS.length; i++){ var c = CLIPS[i], v = c.el, vt = clipTime(c, t);
+  if (vt === null) { if (!v.paused) v.pause(); continue; }
+  if (playing) { if (v.playbackRate !== c.rate) v.playbackRate = c.rate; if (v.paused) v.play().catch(function(){});
+    if (Math.abs(v.currentTime - vt) > .2) v.currentTime = vt; }
+  else { if (!v.paused) v.pause(); if (Math.abs(v.currentTime - vt) > 1/90) v.currentTime = vt; } } }
+function seekClips(t){ return Promise.all(CLIPS.map(function(c){ return new Promise(function(res){
+  var v = c.el, vt = clipTime(c, t); try { v.pause(); } catch(e) {}
+  if (vt === null) return res();
+  var fin = function(){ requestAnimationFrame(function(){ requestAnimationFrame(res); }); };
+  if (Math.abs(v.currentTime - vt) < 1/240 && v.readyState >= 2) return fin();
+  var to = setTimeout(res, 4000);
+  v.addEventListener('seeked', function h(){ v.removeEventListener('seeked', h); clearTimeout(to); fin(); });
+  v.currentTime = vt; }); })); }
+gsap.ticker.add(function(){ if (CLIPS.length) syncClips(window.OPENER.tl.time(), !window.OPENER.tl.paused()); });
+window.OPENER.clipsReady = function(){ return CLIPS.every(function(c){ return c.el.readyState >= 2; }); };
+window.OPENER.seekFrame = function(t){ window.OPENER.seek(t); return seekClips(t); };   // ekspor/snap: tunggu frame klip
 document.fonts.ready.then(()=>{window.OPENER.ready=true;if(!Q.has('clean'))tl.play(0);});   // autoplay; ?clean=1 (export) tidak autoplay
 </script>
 </body>

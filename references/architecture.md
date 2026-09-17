@@ -18,7 +18,7 @@ proyek/
     └── export-frames.mjs  render frame-by-frame (puppeteer)
 ```
 
-Boleh dipadatkan jadi satu berkas (lihat `assets/starter.html`) untuk
+Boleh dipadatkan jadi satu berkas (lihat `assets/starter-opener.html`) untuk
 prototipe; pecah ke struktur di atas begitu adegan > 3.
 
 ## Panggung: 1920×1080 dipatok, lalu di-scale
@@ -47,8 +47,8 @@ mengubah zoom, bukan layout.
 ├── .vignette, .grain
 ```
 
-**Kenapa world membungkus canvas juga:** revisi user yang menentukan —
-"saat zoom itu dia ngga hanya zoom teks tapi background ikut zoom in".
+**Kenapa world membungkus canvas juga:** saat kamera zoom, yang ikut membesar
+harus teks DAN latarnya.
 Men-zoom layer teks saja terasa palsu; men-zoom seluruh dunia terasa kamera.
 Light leak justru HARUS di luar world: ia cahaya di depan lensa, bukan
 bagian dunia.
@@ -89,7 +89,7 @@ merembet ke adegan lain. Sediakan konstanta `DURATION` di satu tempat.
 ## State awal di CSS, bukan di GSAP
 
 ```css
-.hero, .mid-line, .tile, .searchbar { opacity: 0 }
+.hero, .line, .obj, .ornament { opacity: 0 }
 ```
 ```js
 tl.fromTo(el, {opacity:0,y:60}, {opacity:1,y:0, immediateRender:false}, 8.1);

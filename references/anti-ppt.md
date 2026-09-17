@@ -1,8 +1,7 @@
 # Anti-PPT — hukum desain adegan
 
-Dokumen ini adalah alasan skill ini ada. Semua isinya lahir dari revisi
-seorang kreator video terhadap hasil pertama yang "secara teknis benar"
-tapi ditolak mentah-mentah dengan kalimat: *"ini masih terkesan seperti presentasi ppt ."*
+Dokumen ini adalah alasan skill ini ada: hasil yang "secara teknis benar" tetap
+gagal bila terasa seperti presentasi PPT.
 
 ## Kenapa model selalu jatuh ke pola slide
 
@@ -12,34 +11,41 @@ Video promosi tidak menjelaskan — ia **menyatakan**, satu pukulan per shot,
 dan membiarkan gerakan + musik yang membawa emosinya. Kalau kamu merasa
 sebuah adegan "kurang informasi", itu justru tanda adegannya sudah benar.
 
-## Tabel pelanggaran → perbaikan (kasus nyata)
+## Tabel pelanggaran → perbaikan
 
-| Pelanggaran (ditolak) | Perbaikan (diterima) |
+| Pelanggaran | Perbaikan |
 |---|---|
 | Kicker "02 — FITUR" + judul 2 baris + body copy 2 baris + 4 chip badge, layout kolom kiri-kanan | Satu kalimat ≤ 5 kata di tengah-atas + satu objek produk naik ke tengah |
-| Tiga baris teks besar berisi tiga klaim "TANPA …" | Headline 2 kata + tiga tile ikon berlabel 1-2 kata |
+| Tiga baris teks besar berisi tiga klaim "TANPA …" | Headline 2 kata + satu cara dari menu fitur (`opener-konsep.md`): satu fitur didemokan, kata berganti, objek bertransformasi, kartu dikocok, grid tile… — dipilih per proyek |
 | Opener produk B memakai kulit opener produk A (palet, glow, nebula, font yang sama) karena diambil dari starter/proyek lama | Gaya diturunkan dari brand B lewat style brief: palet dari logo/ikon B, font berkarakter lain, bahasa latar lain, tanda tangan gerak lain (SKILL.md Hukum #3) |
-| Semua judul KAPITAL SEMUA, font lebar bobot 800, selalu di tengah, masuk dengan stagger huruf yang sama — "teks terlalu kaku" | Sentence case bobot 500, satu kata sorotan dalam pill + sparkle, tanda baca pop terpisah, ukuran/arah/posisi bergantian (techniques.md §1) |
-| Ladang 96 batang cahaya putih ber-bloom di belakang judul — "background ngga jelas, ngga kontras" | Kantong gelap di bawah teks, partikel berwarna sisi gelap palet dan redup, ≤ 40 elemen terang, bloom hanya di objek (techniques.md §1b) |
+| Semua judul KAPITAL SEMUA, font lebar bobot 800, selalu di tengah, masuk dengan stagger huruf yang sama — terasa kaku | Sentence case bobot 500, penekanan pada kata kunci (sorotan kata opsional — bisa juga kata per kata, ukuran, jeda, objek di samping kata), tanpa titik otomatis (tanda baca hanya bila mengubah arti), ukuran/arah/posisi bergantian (techniques.md §1) |
+| Setiap judul/klaim diakhiri titik, termasuk frase dua kata — terasa kaku dan seperti template | Default tanpa titik; `?` untuk pertanyaan sungguhan, titik hanya untuk gaya dua kalimat pendek yang disengaja dan konsisten (techniques.md §1 aturan 5) |
+| Ladang 96 batang cahaya putih ber-bloom di belakang judul — latar ramai, teks tidak kontras | Kantong gelap di bawah teks, partikel berwarna sisi gelap palet dan redup, ≤ 40 elemen terang, bloom hanya di objek (techniques.md §1b) |
 | Semua opener gelap dengan nebula/partikel, latar tidak pernah dipertimbangkan per segmen | Latar dari tema (gradien terang, warna lembut, blok warna, kertas, foto, atau gelap); pergantian diputuskan per segmen di style brief dan terjadi di balik cut/wipe (techniques.md §7b) |
-| Setiap proyek memakai sorotan pill + bintang yang sama persis (warisan satu proyek yang pernah diterima) | Aturannya hanya "satu kata sorotan"; bentuknya (pill/garis/marker/kotak/warna/coret) dipilih per proyek di style brief, ornamen hanya dari bentuk brand (techniques.md §1) |
+| Setiap opener memberi kata sorotan (garis bawah/pill) di setiap kalimat, atau memakai pill + bintang yang sama persis dengan proyek lain | Sorotan kata opsional dan diputuskan di style brief; bila dipakai, satu bentuk per video yang dipilih per proyek, tidak di setiap kalimat, ornamen hanya dari bentuk brand (techniques.md §1) |
+| Opener app/SaaS hanya menampilkan screenshot diam yang di-zoom atau digeser | UI dirakit ulang dari komponen produk, dipakai (kursor, jari, atau UI yang bereaksi sendiri), data mengisi, transisi dibawa UI (`opener-konsep.md` bagian animasi UI) |
+| Video ditempel layar penuh dengan `autoplay loop`, berjalan dengan jamnya sendiri, dan animasi lain berhenti selama klip diputar | Klip dipasang lewat `clip()` sebagai layer footage yang terikat timeline, dibungkus wadah/perangkat/bingkai yang ikut dianimasikan, teks dan anotasi tetap hidup di atasnya (techniques.md §9b) |
 | Dua opener untuk produk berbeda sama-sama berlatar batang/potongan cahaya melesat ke samping ("lane" / "range") — hasil aturan "objek melintas tiap detik" | Gerak latar dipilih dari menu techniques.md §7c (gradien berpindah, blob, grain hidup, sapuan cahaya, bentuk berputar, partikel naik, grid bernapas…) dan berbeda dari proyek sebelumnya; aliran horizontal hanya untuk tema kecepatan/aliran |
 | Transisi: balok/persegi warna datar raksasa menyapu miring di setiap cut ("kotak persegi aneh"), atau garis tipis menyapu | Menu transisi techniques.md §4c: push-through 3D, kartu berputar dari kedalaman, objek berketebalan melewati lensa, mask bentuk brand, sapuan cahaya; minimal dua jenis, satu berkedalaman, wipe ≤ 2 |
 | Latar flat satu warna (gelap atau terang) dari awal sampai akhir | Permukaan latar ≥ 2 lapis dari menu §7d: glow horizon, duotone diagonal, mesh blob, spotlight + tint, langit berlapis, tekstur — warna dari palet |
+| Latar diam, atau warna latar tidak pernah berganti walau segmen/energi berubah | Latar selalu bergerak (§7c); warna latar boleh berganti kapan dibutuhkan asal ada pemicu terlihat: benda menutup lensa, aksi UI, push ke bidang warna, medan menyapu, cut di ketukan (techniques.md §7b) |
 | Menyalin palet, font, dan tata letak video referensi yang disodorkan user | Ambil ritme dan energinya saja; kulit lahir dari tema produk — katakan itu ke user satu kalimat |
 | Menampilkan `com.example.app` (nama package) di adegan CTA | Dihapus. User tidak peduli; kalau perlu, cukup baris hasil pencarian store |
-| Teks in/out dengan kamera statis | Push-through: kamera dorong masuk ke teks lama → cut → tarik mundur dari teks baru |
-| Glow tebal 4 lapis di semua judul | Judul putih bersih + drop shadow tipis; glow disimpan untuk OBJEK (tile, input, ornamen) |
+| Teks in/out dengan kamera statis | Ukuran shot berganti ke elemen yang sedang bercerita (techniques.md §3b) + koreografi elemen beririsan (§4b); napas kamera sebagai lapisan dasar; push-through hanya bila termotivasi, ±1 per video |
+| "Zoom in-out" dikerjakan sebagai napas kamera beberapa persen — tidak terlihat, video tetap terasa statis | Pergantian ukuran shot yang jelas: kamera mendekat ke elemen (medium close-up / close-up) lalu mundur ke wide saat komposisi butuh seluruh frame; label di lapisan layar supaya tidak terpotong (techniques.md §3b) |
+| Glow tebal 4 lapis di semua judul | Judul putih bersih + drop shadow tipis; glow disimpan untuk OBJEK (objek produk, ornamen) |
 | Latar warp 520 garis putih panjang | 300 partikel pendek berwarna gelap senada — latar tidak boleh bersaing dengan subjek |
 | Latar biru merata (flat) | Gradasi vertikal tegas: nyaris hitam di atas, menyala di horizon bawah |
 | Elemen UI (badge status) muncul mendahului kalimat utamanya | Urutan atensi: kalimat → objek utama → detail pendukung |
 | Zoom push-through dipakai di SEMUA transisi | Perpustakaan gerakan: spin, yaw 3D, roll, elemen terbang melewati lensa; zoom hanya saat termotivasi (mis. menyelam ke layar mockup). "Satu jenis transisi di semua cut" = template transisi PPT, cuma versi mahal |
 | Whip-pan translasi — tepi panggung tersingkap jadi gap hitam | Terbaca "pindah halaman". Jangan pernah menggeser dunia sampai tepinya terlihat |
-| Spin/yaw/roll kejut (zoom+putar tiba-tiba dengan blur di tiap cut) | Ditolak: "kaya editan CapCut". Itu bahasa PRESET editor video, bukan motion design. Ganti: kamera bernapas + koreografi elemen beririsan + object wipe |
+| Spin/yaw/roll kejut (zoom+putar tiba-tiba dengan blur di tiap cut) | Itu bahasa PRESET editor video, bukan motion design. Ganti: kamera bernapas + koreografi elemen beririsan + object wipe |
+| Demo UI terasa statis: UI penuh di frame, kamera diam, hanya kursor bergerak, klik terlalu kecil untuk terbaca | Kamera mengikuti interaksi bila perlu: dekati area yang akan diklik (scale 1,4–2,2, 0,6–0,9 dtk ease in-out), klik terbaca, lalu mundur/geser ke hasilnya; tidak di setiap klik (techniques.md §8) |
+| Opener produk berbeda-beda keluar dengan kerangka sama: teks zoom lalu keluar ke kiri, tiga tile fitur, kotak input diketik, hook → fitur → fitur → janji → logo → CTA — kesannya template walau warnanya baru | Tiga kandidat konsep dari `opener-konsep.md`, satu dipilih dari sifat produk; sidik jari struktur berbeda dari opener sebelumnya; komponen kanonik maks dua dan hanya bila dituntut konsep |
 
-## Pola gagal yang dihasilkan model lain dengan skill ini (5 Sep 2026)
+## Pola gagal yang umum pada explainer
 
-Explainer sejarah 30 dtk, 6 adegan, dinilai "kaya PPT" oleh user. Kodenya:
+Contoh explainer sejarah 30 dtk, 6 adegan, yang terasa seperti PPT. Kodenya:
 
 | Yang dibuat | Kenapa PPT | Yang seharusnya |
 |---|---|---|
@@ -49,8 +55,7 @@ Explainer sejarah 30 dtk, 6 adegan, dinilai "kaya PPT" oleh user. Kodenya:
 | Light leak di setiap cut | Preset editor video | Simpan untuk satu momen istimewa |
 | Tidak ada subjek yang bertahan antar adegan | Tidak ada yang "dibawa" penonton | Hero hadir > 60 % durasi |
 
-Pelajaran: hukum naratif saja tidak cukup untuk model yang tidak pernah
-ditegur user; perlu larangan struktural yang bisa diperiksa dari kode
+Pelajaran: hukum naratif saja tidak cukup; perlu larangan struktural yang bisa diperiksa dari kode
 (SKILL.md → "Larangan struktural") dan starter yang memaksa rig yang benar
 (`assets/starter-explainer.html`).
 
@@ -72,8 +77,8 @@ ditegur user; perlu larangan struktural yang bisa diperiksa dari kode
    pengungkapan bertahap; pull-back = reveal; bounce kecil = playful.
    Pilih gerakan yang searti dengan kalimatnya, jangan acak.
 7. **Transisi ala motion designer, bukan preset editor.** Dua kegagalan
-   berturut-turut mengajarkan urutannya: whip translasi menyingkap tepi
-   ("pindah halaman"); spin/yaw kejut terbaca "efek CapCut". Yang benar:
+   umum: whip translasi menyingkap tepi ("pindah halaman"); spin/yaw kejut
+   terbaca efek preset editor. Yang benar:
    (a) kamera BERNAPAS — drift zoom pelan tanpa henti, tak pernah
    menyentak; (b) perpindahan dikerjakan KOREOGRAFI ELEMEN yang keluar-
    masuk beririsan waktu; (c) OBJECT WIPE — sebuah elemen/ornamen menyapu
